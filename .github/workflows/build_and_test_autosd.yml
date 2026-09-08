@@ -40,4 +40,4 @@ jobs:
 
       - name: Build RPMs
         run: ./build-rpms.sh
-        working-directory: tests
+        working-directory: examples/os_autosd_example_persistency

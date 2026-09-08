@@ -20,7 +20,7 @@ bazel_dep(name = "rules_rpm", version = "0.0.1")
 # override with local path
 local_path_override(
     module_name = "rules_rpm",
-    path = "../toolchain/rpm"
+    path = "../../toolchain/rpm"
 )
 
 autosd_10_gcc = use_extension("@os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
