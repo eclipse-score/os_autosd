@@ -1,0 +1,21 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+bazel_dep(name = "platforms", version = "1.0.0")
+
+bazel_dep(name = "score_bazel_platforms", version = "0.0.0")
+git_override(
+    module_name = "score_bazel_platforms",
+    remote = "https://github.com/eclipse-score/bazel_platforms.git",
+    commit = "31a75c78f3a812ee277fe00a0e2e4db28915a8e7",
+)

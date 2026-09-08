@@ -1,0 +1,65 @@
+From 09a09add44b5cd97232c574e0d79019db5f56e12 Mon Sep 17 00:00:00 2001
+From: odra <lrossett@redhat.com>
+Date: Tue, 8 Sep 2026 09:11:05 -0300
+Subject: [PATCH] fix: implement Default manually for CStringViewStorage
+
+Signed-off-by: odra <lrossett@redhat.com>
+---
+ score/language/rust/libcpp/string_view.rs | 28 +++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/score/language/rust/libcpp/string_view.rs b/score/language/rust/libcpp/string_view.rs
+index af925c9d63..9a6e3dea4f 100644
+--- a/score/language/rust/libcpp/string_view.rs
++++ b/score/language/rust/libcpp/string_view.rs
+@@ -18,21 +18,45 @@ use std::ops::Deref;
+ /// std::string_view
+ ///////////////////////////////////////////////////////////////////////////
+ #[repr(C)]
+-#[derive(Clone, Copy, Debug, PartialEq, Default)]
++#[derive(Clone, Copy, Debug, PartialEq)]
+ #[cfg(feature = "libstdcpp_layout")]
+ struct CStringViewStorage {
+     len: libc::size_t,
+     data: *const std::ffi::c_char,
+ }
+ 
++// Raw pointers do not implement `Default`, so it cannot be derived; a default
++// storage is an empty view: null data with zero length.
++#[cfg(feature = "libstdcpp_layout")]
++impl Default for CStringViewStorage {
++    fn default() -> Self {
++        Self {
++            len: 0,
++            data: std::ptr::null(),
++        }
++    }
++}
++
+ #[repr(C)]
+-#[derive(Clone, Copy, Debug, PartialEq, Default)]
++#[derive(Clone, Copy, Debug, PartialEq)]
+ #[cfg(feature = "libcxx_layout")]
+ struct CStringViewStorage {
+     data: *const std::ffi::c_char,
+     len: libc::size_t,
+ }
+ 
++// Raw pointers do not implement `Default`, so it cannot be derived; a default
++// storage is an empty view: null data with zero length.
++#[cfg(feature = "libcxx_layout")]
++impl Default for CStringViewStorage {
++    fn default() -> Self {
++        Self {
++            data: std::ptr::null(),
++            len: 0,
++        }
++    }
++}
++
+ /// Binary compatible Rust version of `std::string_view`
+ ///
+ /// This type can be safely sent across FFI boundaries where `std::string_view` is expected. It
+-- 
+2.55.0
+
