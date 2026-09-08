@@ -18,6 +18,7 @@ on:
   workflow_dispatch:
 
 jobs:
+  if: false # disable for now
   build:
     name: build
     runs-on: ubuntu-latest

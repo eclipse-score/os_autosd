@@ -14,7 +14,7 @@ bazel_dep(name = "os_autosd", version = "0.0.1")
 # override with local path
 local_path_override(
     module_name = "os_autosd",
-    path = "..",
+    path = "../../",
 )
 bazel_dep(name = "rules_rpm", version = "0.0.1")
 # override with local path
