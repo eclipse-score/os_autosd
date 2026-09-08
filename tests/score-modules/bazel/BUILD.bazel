@@ -10,3 +10,27 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+
+# Root-provided libclang toolchain. Score modules (e.g. score_communication)
+# require @score_tooling//cpp/libclang:libclang_toolchain_type for their `unit`
+# targets, but their own libclang toolchains reference @llvm_toolchain* repos
+# that only exist in their namespace when the root-only `llvm` extension runs
+# there. Since toolchains resolve by type globally, we register one here built
+# from the root's own llvm (see //bazel:score_llvm_toolchain.MODULE.bazel).
+load(
+    "@score_tooling//cpp/libclang:libclang_toolchain.bzl",
+    "libclang_toolchain",
+)
+
+libclang_toolchain(
+    name = "root_libclang",
+    cc_toolchain = "@llvm_toolchain//:cc-clang-x86_64-linux",
+    libclang = "@llvm_toolchain_llvm//:lib/libclang.so",
+)
+
+toolchain(
+    name = "libclang_toolchain",
+    toolchain = ":root_libclang",
+    toolchain_type = "@score_tooling//cpp/libclang:libclang_toolchain_type",
+    visibility = ["//visibility:public"],
+)

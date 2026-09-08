@@ -27,3 +27,69 @@ git_override(
     ],
     remote = "https://github.com/eclipse-score/baselibs.git",
 )
+
+bazel_dep(name = "score_logging", version = "0.0.0")
+git_override(
+    module_name = "score_logging",
+    branch = "main",
+    patch_strip = 1,
+    patches = [
+        "//patches/logging:0001-fix-ephemeral-MODULE.bazel-changes.patch",
+        "//patches/logging:0002-fix-use-stable-core-str-from_utf8-instead-of-unstabl.patch",
+    ],
+    remote = "https://github.com/eclipse-score/logging.git",
+)
+
+bazel_dep(name = "score_persistency", version = "0.0.0")
+git_override(
+    module_name = "score_persistency",
+    branch = "main",
+    patch_strip = 1,
+    patches = [
+        "//patches/persistency:0001-fix-ephemeral-MODULE.bazel-changes.patch",
+    ],
+    remote = "https://github.com/eclipse-score/persistency.git",
+)
+
+bazel_dep(name = "score_lifecycle", version = "0.0.0")
+git_override(
+    module_name = "score_lifecycle",
+    branch = "main",
+    patch_strip = 1,
+    patches = [
+        "//patches/lifecycle:0001-feat-ephemeral-MODULE.bazel-changes.patch",
+    ],
+    remote = "https://github.com/eclipse-score/lifecycle.git",
+)
+
+bazel_dep(name = "score_communication", version = "0.0.0")
+git_override(
+    module_name = "score_communication",
+    branch = "main",
+    patch_strip = 1,
+    patches = [
+        "//patches/communication:0001-feat-ephemeral-MODULE.bazel-changes.patch",
+        "//patches/communication:0002-Fix-tag-api_surface_test-as-manual.patch",
+    ],
+    remote = "https://github.com/eclipse-score/communication.git",
+)
+
+bazel_dep(name = "score_orchestrator", version = "0.0.0")
+git_override(
+    module_name = "score_orchestrator",
+    branch = "main",
+    patch_strip = 1,
+    patches = [],
+    remote = "https://github.com/eclipse-score/orchestrator.git",
+)
+
+bazel_dep(name = "score_time", version = "0.0.0")
+git_override(
+    module_name = "score_time",
+    branch = "main",
+    patch_strip = 1,
+    patches = [
+        "//patches/time:0001-feat-ephemeral-MODULE.bazel-changes.patch",
+    ],
+    remote = "https://github.com/eclipse-score/inc_time.git",
+)

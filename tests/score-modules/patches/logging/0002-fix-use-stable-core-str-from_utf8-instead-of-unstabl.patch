@@ -1,0 +1,27 @@
+From 566f91a0de7b7225c0c3aa777f250a0d03e9827d Mon Sep 17 00:00:00 2001
+From: odra <lrossett@redhat.com>
+Date: Wed, 9 Sep 2026 08:25:46 -0300
+Subject: [PATCH] fix: use stable core::str::from_utf8 instead of unstable
+ inherent str::from_utf8 in cpp_init ffi
+
+Signed-off-by: odra <lrossett@redhat.com>
+---
+ score/mw/log/rust/score_log_bridge_cpp_init/ffi.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/score/mw/log/rust/score_log_bridge_cpp_init/ffi.rs b/score/mw/log/rust/score_log_bridge_cpp_init/ffi.rs
+index 822698a..587116b 100644
+--- a/score/mw/log/rust/score_log_bridge_cpp_init/ffi.rs
++++ b/score/mw/log/rust/score_log_bridge_cpp_init/ffi.rs
+@@ -28,7 +28,7 @@ extern "C" fn set_default_logger(
+     if !context_ptr.is_null() {
+         let context = unsafe {
+             let slice = from_raw_parts(context_ptr.cast(), context_size);
+-            str::from_utf8(slice).expect("provided context is not a valid UTF-8 string")
++            core::str::from_utf8(slice).expect("provided context is not a valid UTF-8 string")
+         };
+         builder = builder.context(context);
+     }
+-- 
+2.55.0
+
