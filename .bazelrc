@@ -6,4 +6,4 @@ build --tool_java_runtime_version=remotejdk_17
 test --test_output=errors
 
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
-common --registry=https://bcr.bazel.build
+common --registry=https://bcr.bazel.build 

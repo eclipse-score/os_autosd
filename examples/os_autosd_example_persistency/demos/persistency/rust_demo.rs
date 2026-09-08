@@ -1,3 +1,15 @@
+// *******************************************************************************
+// Copyright (c) 2026 Contributors to the Eclipse Foundation
+//
+// See the NOTICE file(s) distributed with this work for additional
+// information regarding copyright ownership.
+//
+// This program and the accompanying materials are made available under the
+// terms of the Apache License Version 2.0 which is available at
+// <https://www.apache.org/licenses/LICENSE-2.0>
+//
+// SPDX-License-Identifier: Apache-2.0
+// *******************************************************************************
 /**
  * Standalone demonstration of key-value storage concepts
  *
@@ -10,7 +22,6 @@
  * Note: This is a simplified standalone demo. For full KVS functionality,
  * install and use the persistency Rust library (rust_kvs).
  */
-
 use rust_kvs::prelude::*;
 use std::io::{self, Write};
 use std::path::PathBuf;
@@ -34,15 +45,9 @@ impl KvsDemo {
     }
 
     fn print_header(&self, title: &str) {
-        println!("\n{}{}{}{}{}",
-                 BOLD, BLUE,
-                 "=".repeat(60),
-                 RESET, "\n");
+        println!("\n{}{}{}{}{}", BOLD, BLUE, "=".repeat(60), RESET, "\n");
         println!("{}{}  {}{}", BOLD, CYAN, title, RESET);
-        println!("{}{}{}{}",
-                 BOLD, BLUE,
-                 "=".repeat(60),
-                 RESET);
+        println!("{}{}{}{}", BOLD, BLUE, "=".repeat(60), RESET);
         println!();
     }
 
@@ -74,8 +79,18 @@ impl KvsDemo {
             KvsValue::Boolean(v) => println!("{}{}{} (boolean)", GREEN, v, RESET),
             KvsValue::String(v) => println!("{}\"{}\" (string){}", GREEN, v, RESET),
             KvsValue::Null => println!("{}null{} (null)", GREEN, RESET),
-            KvsValue::Array(v) => println!("{}[array with {} elements]{} (array)", GREEN, v.len(), RESET),
-            KvsValue::Object(v) => println!("{}{{object with {} properties}}{} (object)", GREEN, v.len(), RESET),
+            KvsValue::Array(v) => println!(
+                "{}[array with {} elements]{} (array)",
+                GREEN,
+                v.len(),
+                RESET
+            ),
+            KvsValue::Object(v) => println!(
+                "{}{{object with {} properties}}{} (object)",
+                GREEN,
+                v.len(),
+                RESET
+            ),
         }
     }
 
@@ -129,7 +144,10 @@ impl KvsDemo {
         self.print_success("Data persisted to storage");
 
         let final_keys = kvs.get_all_keys()?;
-        self.print_info(&format!("Total keys after operations: {}", final_keys.len()));
+        self.print_info(&format!(
+            "Total keys after operations: {}",
+            final_keys.len()
+        ));
 
         Ok(())
     }
@@ -231,8 +249,8 @@ impl KvsDemo {
     }
 
     fn create_defaults_file(&self, instance_id: InstanceId) -> Result<(), ErrorCode> {
-        let defaults_file_path = PathBuf::from(&self.data_dir)
-            .join(format!("kvs_{}_default.json", instance_id.0));
+        let defaults_file_path =
+            PathBuf::from(&self.data_dir).join(format!("kvs_{}_default.json", instance_id.0));
 
         let kvs_value = KvsValue::from(KvsMap::from([
             ("theme".to_string(), KvsValue::from("dark")),
@@ -288,7 +306,13 @@ impl KvsDemo {
 
         self.print_sub_header("Reading default values");
 
-        let default_keys = ["theme", "language", "timeout", "auto_save", "max_connections"];
+        let default_keys = [
+            "theme",
+            "language",
+            "timeout",
+            "auto_save",
+            "max_connections",
+        ];
         for key in &default_keys {
             match kvs.get_default_value(key) {
                 Ok(value) => {
@@ -310,7 +334,11 @@ impl KvsDemo {
         for key in &default_keys {
             if let Ok(value) = kvs.get_value(key) {
                 let is_default = !kvs.key_exists(key)?;
-                let prefix = if is_default { "(default) " } else { "(custom)  " };
+                let prefix = if is_default {
+                    "(default) "
+                } else {
+                    "(custom)  "
+                };
                 print!("  {}", prefix);
                 self.print_kvs_value(key, &value);
             }
@@ -331,7 +359,6 @@ impl KvsDemo {
 
     fn demonstrate_reset(&self) -> Result<(), ErrorCode> {
         self.print_header("Reset Operations Demo");
-
 
         let builder = KvsBuilder::new(InstanceId(6))
             .dir(self.data_dir.clone())
@@ -369,8 +396,10 @@ impl KvsDemo {
     }
 
     fn run(&self) -> Result<(), ErrorCode> {
-        println!("{}{}🚀 KVS Rust Library Demonstration Program{}",
-                 BOLD, GREEN, RESET);
+        println!(
+            "{}{}🚀 KVS Rust Library Demonstration Program{}",
+            BOLD, GREEN, RESET
+        );
         println!("{}Data directory: {}{}", BLUE, self.data_dir, RESET);
         println!();
 
@@ -403,8 +432,10 @@ impl KvsDemo {
             self.data_dir
         ));
 
-        println!("\n{}{}✨ Thank you for exploring the KVS Rust library!{}{}\n",
-                 BOLD, GREEN, RESET, "\n");
+        println!(
+            "\n{}{}✨ Thank you for exploring the KVS Rust library!{}{}\n",
+            BOLD, GREEN, RESET, "\n"
+        );
 
         Ok(())
     }
@@ -420,7 +451,10 @@ fn main() {
 
     // Create data directory if it doesn't exist
     if let Err(e) = std::fs::create_dir_all(&data_dir) {
-        eprintln!("{}Failed to create directory '{}': {}{}", RED, data_dir, e, RESET);
+        eprintln!(
+            "{}Failed to create directory '{}': {}{}",
+            RED, data_dir, e, RESET
+        );
         std::process::exit(1);
     }
 

@@ -12,10 +12,9 @@
 # *******************************************************************************
 
 bazel_dep(name = "platforms", version = "1.0.0")
-
 bazel_dep(name = "score_bazel_platforms", version = "0.0.0")
 git_override(
     module_name = "score_bazel_platforms",
-    remote = "https://github.com/eclipse-score/bazel_platforms.git",
     commit = "31a75c78f3a812ee277fe00a0e2e4db28915a8e7",
+    remote = "https://github.com/eclipse-score/bazel_platforms.git",
 )

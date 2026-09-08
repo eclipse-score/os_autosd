@@ -12,19 +12,19 @@ jobs:
         working-directory: "tests/score-modules"
     runs-on: "ubuntu-latest"
     strategy:
-        fail-fast: false
-        matrix:
-          include:
-            - bazel_config: "score-autosd-x86_64"
-              bazel_target: "@score_baselibs//score/..."
+      fail-fast: false
+      matrix:
+        include:
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_baselibs//score/..."
     name: "${{ matrix.bazel_target }} / ${{ matrix.bazel_config }}"
     steps:
       - name: "Clean disk space"
         uses: "eclipse-score/more-disk-space@v1"
-      
+
       - name: "Checkout repository"
         uses: "actions/checkout@v4"
-      
+
       - name: "Setup Bazel"
         uses: "bazel-contrib/setup-bazel@0.18.0"
         with:

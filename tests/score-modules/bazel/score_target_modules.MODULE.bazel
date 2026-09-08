@@ -14,7 +14,6 @@
 bazel_dep(name = "score_baselibs", version = "0.0.0")
 git_override(
     module_name = "score_baselibs",
-    remote = "https://github.com/eclipse-score/baselibs.git",
     branch = "main",
     patch_strip = 1,
     patches = [
@@ -25,5 +24,6 @@ git_override(
         "//patches/baselibs:0005-fix-bind-format_args-value-to-a-local-to-avoid-dropp.patch",
         "//patches/baselibs:0006-fix-replace-unstable-std-APIs-is_multiple_of-inheren.patch",
         "//patches/baselibs:0007-fix-use-stable-core-str-from_utf8_unchecked-in-ffi.patch",
-    ]
+    ],
+    remote = "https://github.com/eclipse-score/baselibs.git",
 )
