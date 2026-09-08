@@ -1,0 +1,29 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+bazel_dep(name = "score_baselibs", version = "0.0.0")
+git_override(
+    module_name = "score_baselibs",
+    branch = "main",
+    patch_strip = 1,
+    patches = [
+        "//patches/baselibs:0001-fix-openssl-build-for-autosd.patch",
+        "//patches/baselibs:0002-fix-add-non_null_from_ref.patch",
+        "//patches/baselibs:0003-fix-test_from_utf8_error_debug-test.patch",
+        "//patches/baselibs:0004-fix-implement-Default-manually-for-CStringViewStorag.patch",
+        "//patches/baselibs:0005-fix-bind-format_args-value-to-a-local-to-avoid-dropp.patch",
+        "//patches/baselibs:0006-fix-replace-unstable-std-APIs-is_multiple_of-inheren.patch",
+        "//patches/baselibs:0007-fix-use-stable-core-str-from_utf8_unchecked-in-ffi.patch",
+    ],
+    remote = "https://github.com/eclipse-score/baselibs.git",
+)

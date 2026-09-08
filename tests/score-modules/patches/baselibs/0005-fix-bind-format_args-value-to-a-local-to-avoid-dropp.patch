@@ -1,0 +1,49 @@
+From acc43db39cadeb3d91a603a4b085e573de8b8083 Mon Sep 17 00:00:00 2001
+From: odra <lrossett@redhat.com>
+Date: Tue, 8 Sep 2026 09:15:02 -0300
+Subject: [PATCH] fix: build Arguments from a named fragment array in record
+ test to avoid dropped-temporary borrow
+
+Signed-off-by: odra <lrossett@redhat.com>
+---
+ score/log_rust/score_log/lib.rs | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/score/log_rust/score_log/lib.rs b/score/log_rust/score_log/lib.rs
+index a2b96c0a5b..1833a862da 100644
+--- a/score/log_rust/score_log/lib.rs
++++ b/score/log_rust/score_log/lib.rs
+@@ -715,8 +715,6 @@ mod tests {
+ 
+     #[test]
+     fn test_record_new_and_params() {
+-        // Local import to avoid name clash.
+-        use super::format_args;
+         // Fix for self-reference in `score_log_format_args`.
+         use crate as score_log;
+ 
+@@ -724,7 +722,20 @@ mod tests {
+         let context = "context";
+         let metadata = Metadata::new(level, context);
+ 
+-        let args = format_args!("test_string_{}", 123);
++        // `format_args!` expands to `Arguments(&[..])`, which borrows a
++        // temporary array that cannot be lifetime-extended past this statement
++        // (tuple-struct construction does not trigger temporary lifetime
++        // extension). Build the fragment array as a named local that lives for
++        // the whole test so `args` and `record` stay valid.
++        let value = 123;
++        let fragments = [
++            score_log::fmt::Fragment::Literal("test_string_"),
++            score_log::fmt::Fragment::Placeholder(score_log::fmt::Placeholder::new(
++                &value,
++                score_log::fmt::FormatSpec::new(),
++            )),
++        ];
++        let args = score_log::fmt::Arguments(&fragments);
+         let module_path = "module_path";
+         let file = "file";
+         let line_num = 123u32;
+-- 
+2.55.0
+

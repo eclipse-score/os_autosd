@@ -10,10 +10,16 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(name = "os_autosd_aib_example")
 
-bazel_dep(name = "os_autosd", version = "0.0.0")
-local_path_override(
-    module_name = "os_autosd",
-    path = "../../",
-)
+module(name = "score_autosd_feature_module_tests")
+
+bazel_dep(name = "rules_shell", version = "0.6.0")
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "flatbuffers", version = "25.12.19")
+
+# https://github.com/grpc/grpc-java/issues/12165
+bazel_dep(name = "grpc-java", version = "1.78.0")
+
+include("//bazel:score_platforms.MODULE.bazel")
+include("//bazel:score_gcc_toolchain.MODULE.bazel")
+include("//bazel:score_target_modules.MODULE.bazel")

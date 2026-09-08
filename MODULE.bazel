@@ -16,7 +16,7 @@ module(name = "os_autosd")
 bazel_dep(name = "platforms", version = "0.0.11")
 bazel_dep(name = "rules_python", version = "1.4.1")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "rules_cc", version = "0.2.16")
 
 PYTHON_VERSION = "3.12"
 
@@ -26,16 +26,18 @@ python.toolchain(
     python_version = PYTHON_VERSION,
 )
 
+bazel_dep(name = "score_tooling", version = "2.2.1")
+
 # Checker rule for CopyRight checks/fixs
-bazel_dep(name = "score_cr_checker", version = "0.3.1")
+#bazel_dep(name = "score_cr_checker", version = "0.3.1")
 bazel_dep(name = "score_python_basics", version = "0.3.4")
 bazel_dep(name = "score_starpls_lsp", version = "0.1.0")
 
 # Dash license checker
-bazel_dep(name = "score_dash_license_checker", version = "0.1.2")
+#bazel_dep(name = "score_dash_license_checker", version = "0.1.2")
 
 # Format checker
-bazel_dep(name = "score_format_checker", version = "0.1.1")
+#bazel_dep(name = "score_format_checker", version = "0.1.1")
 bazel_dep(name = "aspect_rules_lint", version = "1.4.4")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
 
@@ -45,3 +47,6 @@ bazel_dep(name = "score_docs_as_code", version = "4.6.0")
 # AutoSD GCC Toolchains
 autosd_10_gcc = use_extension("//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
 use_repo(autosd_10_gcc, "autosd_10_gcc_repo")
+
+# https://github.com/grpc/grpc-java/issues/12165
+bazel_dep(name = "grpc-java", version = "1.78.0")

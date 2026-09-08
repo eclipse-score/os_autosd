@@ -10,10 +10,3 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(name = "os_autosd_aib_example")
-
-bazel_dep(name = "os_autosd", version = "0.0.0")
-local_path_override(
-    module_name = "os_autosd",
-    path = "../../",
-)

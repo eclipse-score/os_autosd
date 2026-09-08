@@ -10,10 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(
-    name = "os_autosd_tests",
-    version = "0.0.1",
-)
+module(name = "os_autosd_example_persistency")
 
 include("//:score_modules.MODULE.bazel")
 include("//:score_toolchains.MODULE.bazel")

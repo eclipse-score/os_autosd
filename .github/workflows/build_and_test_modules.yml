@@ -1,0 +1,40 @@
+name: "Eclipse S-CORE Modules Testing"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * *"
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: "tests/score-modules"
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_baselibs//score/..."
+    name: "${{ matrix.bazel_target }} / ${{ matrix.bazel_config }}"
+    steps:
+      - name: "Clean disk space"
+        uses: "eclipse-score/more-disk-space@v1"
+
+      - name: "Checkout repository"
+        uses: "actions/checkout@v4"
+
+      - name: "Setup Bazel"
+        uses: "bazel-contrib/setup-bazel@0.18.0"
+        with:
+          bazelisk-cache: true
+          disk-cache: "${{ github.workflow }}"
+          repository-cache: true
+          cache-save: false
+
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+
+      - name: "Build"
+        run: "bazel build --config ${{ matrix.bazel_config }} ${{ matrix.bazel_target }}"

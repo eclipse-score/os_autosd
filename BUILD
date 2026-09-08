@@ -10,11 +10,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-load("@score_cr_checker//:cr_checker.bzl", "copyright_checker")
-load("@score_dash_license_checker//:dash.bzl", "dash_license_checker")
 load("@score_docs_as_code//:docs.bzl", "docs")
-load("@score_format_checker//:macros.bzl", "use_format_targets")
-load("@score_starpls_lsp//:starpls.bzl", "setup_starpls")
+load("@score_tooling//:defs.bzl", "copyright_checker", "setup_starpls")
+load("@score_tooling//third_party/format:macros.bzl", "use_format_targets")
+#load("@score_tooling//third_party/format:macros.bzl", "use_format_targets")
+#load("@score_tooling//:defs.bzl", "copyright_checker", "dash_license_checker", "setup_starpls")
+
 load("//:project_config.bzl", "PROJECT_CONFIG")
 
 setup_starpls(
@@ -25,14 +26,15 @@ setup_starpls(
 copyright_checker(
     name = "copyright",
     srcs = [
-        "Containerfile",
+        "BUILD",
+        "MODULE.bazel",
+        "examples",
         "tests",
         "toolchain",
-        "//:BUILD",
-        "//:MODULE.bazel",
     ],
-    config = "@score_cr_checker//resources:config",
-    template = "@score_cr_checker//resources:templates",
+    config = "@score_tooling//cr_checker/resources:config",
+    #exclusion = "//:.copyright_exclusions",
+    template = "@score_tooling//cr_checker/resources:templates",
     visibility = ["//visibility:public"],
 )
 
