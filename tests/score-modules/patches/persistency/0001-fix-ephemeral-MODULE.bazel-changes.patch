@@ -1,0 +1,40 @@
+From 3c1bbc327e0c38e38d9e6034ecd7dac430df0620 Mon Sep 17 00:00:00 2001
+From: odra <lrossett@redhat.com>
+Date: Wed, 9 Sep 2026 08:50:40 -0300
+Subject: [PATCH] fix(ephemeral): MODULE.bazel changes
+
+Signed-off-by: odra <lrossett@redhat.com>
+---
+ MODULE.bazel | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index a8c2939a..d67333be 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -34,10 +34,10 @@ bazel_dep(name = "score_tooling", version = "2.2.0")
+ # Development dependencies (alphabetically sorted)
+ bazel_dep(name = "aspect_rules_lint", version = "2.7.2", dev_dependency = True)
+ bazel_dep(name = "buildifier_prebuilt", version = "8.5.1.3", dev_dependency = True)
+-bazel_dep(name = "google_benchmark", version = "1.9.5", dev_dependency = True)
+-bazel_dep(name = "googletest", version = "1.17.0.bcr.2", dev_dependency = True)
++bazel_dep(name = "google_benchmark", version = "1.9.5")
++bazel_dep(name = "googletest", version = "1.18.0")
+ bazel_dep(name = "score_bazel_cpp_toolchains", version = "1.0.3", dev_dependency = True)
+-bazel_dep(name = "score_rules_imagefs", version = "0.1.0", dev_dependency = True)
++bazel_dep(name = "score_rules_imagefs", version = "0.1.0")
+ bazel_dep(name = "score_rust_policies", version = "0.0.5", dev_dependency = True)
+ bazel_dep(name = "score_toolchains_rust", version = "0.10.0", dev_dependency = True)
+ 
+@@ -50,7 +50,7 @@ python.toolchain(
+     python_version = PYTHON_VERSION,
+ )
+ 
+-pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip", dev_dependency = True)
++pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+ pip.parse(
+     hub_name = "pip_score_venv_test",
+     python_version = PYTHON_VERSION,
+-- 
+2.55.0
+

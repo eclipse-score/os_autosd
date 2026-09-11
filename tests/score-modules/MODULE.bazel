@@ -22,4 +22,13 @@ bazel_dep(name = "grpc-java", version = "1.78.0")
 
 include("//bazel:score_platforms.MODULE.bazel")
 include("//bazel:score_gcc_toolchain.MODULE.bazel")
+include("//bazel:score_rust_toolchain.MODULE.bazel")
+include("//bazel:score_python_toolchain.MODULE.bazel")
+include("//bazel:score_llvm_toolchain.MODULE.bazel")
+include("//bazel:score_tooling.MODULE.bazel")
 include("//bazel:score_target_modules.MODULE.bazel")
+
+single_version_override(
+    module_name = "googletest",
+    version = "1.17.0.bcr.2",
+)

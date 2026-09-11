@@ -15,8 +15,28 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # baselibs
           - bazel_config: "score-autosd-x86_64"
             bazel_target: "@score_baselibs//score/..."
+          # logging
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_logging//score/..."
+          # persistency
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_persistency//score/..."
+          # lifecycle
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_lifecycle//score/..."
+          # communication
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_communication//score/..."
+          # orchestrator
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_orchestrator//src/..."
+          # time
+          - bazel_config: "score-autosd-x86_64"
+            bazel_target: "@score_time//score/..."
+
     name: "${{ matrix.bazel_target }} / ${{ matrix.bazel_config }}"
     steps:
       - name: "Clean disk space"

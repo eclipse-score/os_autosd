@@ -1,0 +1,26 @@
+From 09e2e2b76ef8fae6dd089df620ced5d40d4800a0 Mon Sep 17 00:00:00 2001
+From: odra <lrossett@redhat.com>
+Date: Wed, 9 Sep 2026 10:17:58 -0300
+Subject: [PATCH] feat(ephemeral) MODULE.bazel changes
+
+Signed-off-by: odra <lrossett@redhat.com>
+---
+ MODULE.bazel | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 01717789d..0d21f8c8a 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -26,7 +26,7 @@ bazel_dep(name = "platforms", version = "1.1.0")
+ bazel_dep(name = "download_utils", version = "1.2.2")
+ bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
+ 
+-bazel_dep(name = "google_benchmark", version = "1.9.5", dev_dependency = True)
++bazel_dep(name = "google_benchmark", version = "1.9.5")
+ 
+ # S-CORE process rules
+ 
+-- 
+2.55.0
+

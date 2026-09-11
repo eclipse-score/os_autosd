@@ -1,0 +1,45 @@
+From 1e60b765432a786cc008740e82c7cf329432ec2f Mon Sep 17 00:00:00 2001
+From: odra <lrossett@redhat.com>
+Date: Wed, 9 Sep 2026 07:54:45 -0300
+Subject: [PATCH] fix: ephemeral MODULE.bazel changes
+
+Signed-off-by: odra <lrossett@redhat.com>
+---
+ MODULE.bazel | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 78d3d92..e5ac8cf 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -42,15 +42,15 @@ bazel_dep(name = "score_rust_policies", version = "0.0.5")
+ bazel_dep(name = "score_process_description", version = "2.1.2")
+ bazel_dep(name = "score_platform", version = "0.7.2")
+ 
+-bazel_dep(name = "score_itf", version = "0.5.0", dev_dependency = True)
++bazel_dep(name = "score_itf", version = "0.5.0")
+ 
+ # OCI / Docker image rules for integration tests
+-bazel_dep(name = "rules_oci", version = "2.2.7", dev_dependency = True)
++bazel_dep(name = "rules_oci", version = "2.2.7")
+ 
+ bazel_dep(name = "rules_pkg", version = "1.2.0")
+ 
+ # QNX image filesystem rules for QNX integration tests
+-bazel_dep(name = "score_rules_imagefs", version = "0.1.0", dev_dependency = True)
++bazel_dep(name = "score_rules_imagefs", version = "0.1.0")
+ 
+ imagefs = use_extension("@score_rules_imagefs//extensions:imagefs.bzl", "imagefs", dev_dependency = True)
+ imagefs.toolchain(
+@@ -75,7 +75,7 @@ use_repo(
+     "score_qnx_x86_64_ifs_toolchain",
+ )
+ 
+-oci = use_extension("@rules_oci//oci:extensions.bzl", "oci", dev_dependency = True)
++oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+ oci.pull(
+     name = "ubuntu_24_04",
+     digest = "sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30",
+-- 
+2.55.0
+

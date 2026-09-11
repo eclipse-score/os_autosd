@@ -1,0 +1,25 @@
+From c0501f9ecb0ba79a0923ef5cb62d11b051e3e365 Mon Sep 17 00:00:00 2001
+From: odra <lrossett@redhat.com>
+Date: Wed, 9 Sep 2026 10:47:48 -0300
+Subject: [PATCH] Fix: tag api_surface_test as manual
+
+Signed-off-by: odra <lrossett@redhat.com>
+---
+ score/mw/com/BUILD | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/score/mw/com/BUILD b/score/mw/com/BUILD
+index 75dc4029..5b6db534 100644
+--- a/score/mw/com/BUILD
++++ b/score/mw/com/BUILD
+@@ -167,6 +167,7 @@ api_surface_test(
+     name = "api_surface_test",
+     check_docs = False,
+     lock_file = "api_surface.lock.json",
++    tags = ["manual"],
+     target = ":com",
+ )
+ 
+-- 
+2.55.0
+
