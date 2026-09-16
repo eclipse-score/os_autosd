@@ -1,0 +1,12 @@
+# Copyright (c) 2022 Red Hat
+# Licensed under the MIT License. Source: https://gitlab.com/CentOS/automotive/src/automotive-image-builder/-/blob/main/LICENSE?ref_type=heads
+
+# yaml-language-server: $schema=https://centos.gitlab.io/automotive/src/automotive-image-builder/manifest_schema.yml
+# This is a simpler example showing how to add a custom rpm and set the root password
+
+name: simple
+
+content:
+  rpms:
+    - vim
+    - bash
