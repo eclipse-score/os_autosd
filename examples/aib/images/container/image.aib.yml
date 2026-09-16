@@ -1,0 +1,24 @@
+# Copyright (c) 2022 Red Hat
+# Licensed under the MIT License. Source: https://gitlab.com/CentOS/automotive/src/automotive-image-builder/-/blob/main/LICENSE?ref_type=heads
+
+# yaml-language-server: $schema=https://centos.gitlab.io/automotive/src/automotive-image-builder/manifest_schema.yml
+# This is an example showing how to install and use a container
+
+name: container
+
+content:
+  # The container service depends on vsomeip3-routingmanager from this repo
+  repos:
+    - id: copr-sample-apps
+      baseurl: https://download.copr.fedorainfracloud.org/results/alexl/cs10-sample-images/centos-stream-10-$arch/
+  rpms:
+    - podman
+    - auto-apps
+    - vsomeip3-routingmanager
+  container_images:
+    - source: registry.gitlab.com/centos/automotive/sample-images/demo/auto-apps
+      tag: latest
+      name: localhost/auto-apps
+  add_files:
+    - path: /etc/containers/systemd/radio.container
+      source_path: image_files/radio.container

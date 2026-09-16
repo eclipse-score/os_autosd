@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2025 Contributors to the Eclipse Foundation
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -17,24 +17,15 @@ package(default_visibility = ["//:__subpackages__"])
 bzl_library(
     name = "aib_rule",
     srcs = [
-        "aib_manifest.bzl",
-        "aib_rule.bzl",
-        "manifest_auth.bzl",
-        "manifest_image.bzl",
-        "manifest_kernel.bzl",
-        "manifest_network.bzl",
-        "manifest_partition.bzl",
-        "manifest_utils.bzl",
+        "aib_build_builder.bzl",
+        "aib_build_disk.bzl",
+        "aib_script.bzl",
     ],
 )
 
 exports_files([
-    "aib_manifest.bzl",
-    "aib_rule.bzl",
-    "manifest_auth.bzl",
-    "manifest_image.bzl",
-    "manifest_kernel.bzl",
-    "manifest_network.bzl",
-    "manifest_partition.bzl",
-    "manifest_utils.bzl",
+    "aib_script.bzl",
+    "aib_build_builder.bzl",
+    "aib_build_image.bzl",
+    "aib_build_disk.bzl",
 ])

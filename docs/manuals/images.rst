@@ -153,8 +153,145 @@ a tool provided by the CentOS Automotive SIG to build AutoSD images.
 
 NOTE: AIB does not support cross-compilation.
 
-MODULE.bazel
+NOTE: The list of available distros to use is available at: https://gitlab.com/CentOS/automotive/src/automotive-image-builder/-/tree/main/distro?ref_type=heads
+
+Bazel Rules
+***********
+
+aib_script
+^^^^^^^^^^
+
+.. code-block:: starlark
+
+   aib_script(
+     name = "aib_build_script_gen",
+     oci_image = "quay.io/centos-sig-automotive/automotive-image-builder:latest",
+     oci_runtime = "podman"
+   )
+
+   aib_script(
+     name = "aib_build_script_static",
+     script_path = ":my_aib_sh"
+   )
+
+This rule will generate or use an existing shell script to invoke Automotive Image Builder, the rule itself runs an OCI
+container using this image: :code: ``quay.io/centos-sig-automotive/automotive-image-builder:latest``.
+
+.. csv-table:: 
+   :header: "field", "Required", "Default Value", "Description"
+   :widths: 20, 10, 25, 40
+
+   "script_path", "false", "null", "An optional label to point to an existing aib script (it will generate a new one if omitted)"
+   "oci_image", "false", "quay.io/centos-sig-automotive/automotive-image-builder:latest", "OCI image to use in order to generate a new script"
+   "oci_runtime", false, "podman", "oci runtime (podman, docker, etc) in order to run the container that generates a new aib script"
+
+aib_build_builder
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: starlark
+
+   aib_build_builder(
+     name = "builder",
+     arch = "x86_64",
+     distro = "autosd10",
+     aib_script = ":aib_build_script"
+   )
+
+
+This rule will create an OCI archive (container image) that is used to generate a disk image (.qcow2, .img, etc).
+
+.. csv-table:: 
+   :header: "field", "Required", "Default Value", "Description"
+   :widths: 20, 10, 25, 40
+
+   "distro", "false", "autosd10", "Target distro to use"
+   "arch", "true", "N/A", "Target image architecture (x86_64, aarch64)"
+   "aib_script", "true", "N/A", "The generated AIB script to use (usually from aib_script rule)"
+
+The archive name will use the following name format: ``score-autosd-$label_name-builder-$distro-$arch.oci``.
+
+aib_build_image
+^^^^^^^^^^^^^^^
+
+.. code-block:: starlark
+
+   aib_build_image(
+     name = "example", 
+     distro = "autosd10",
+     target = "qemu",
+     arch = "x86_64",
+     aib_script = ":aib_build_script_gen",
+     aib_define_files = [
+         "//common_files:vars.yml",
+         "//common_files:vars-devel.yml",
+     ],
+     aib_include_dirs = [
+         ":image_files",
+     ],
+     aib_manifest = ":image.aib.yml",
+     oci_runtime = "podman"
+  )
+
+This rule will create an AutoSD bootc image (OCI archive as well), which contains all the packages and files of a
+disk image. This OCI archive will be used later to genereate a disk image file.
+
+.. csv-table:: 
+   :header: "field", "Required", "Default Value", "Description"
+   :widths: 20, 10, 25, 40
+
+   "distro", "false", "autosd10", "Target distro to use"
+   "target", "true", "N/A", "Target platform to build to (QEMU, specific HW, etc)"
+   "arch", "true", "N/A", "Target image architecture (x86_64, aarch64)"
+   "aib_script", "true", "N/A", "The generated AIB script to use (usually from aib_script rule)"
+   "aib_manifest", "true", "N/A", "The AIB manifest file to use to generate an image"
+   "aib_define_files", "false", [], "The list of variable files (YAML format) to be used by AIB"
+   "aib_include_dirs", false, [], "The list of directories to be includes when building an image, this is required to copy files to an AutoSD image"
+   "oci_runtime", false, "podman", "oci runtime (podman, docker, etc) in order to run the container that builds the OCI archive"
+
+The archive name will use the following name format: ``score-autosd-$label_name-bootc-$distro-$arch.oci``
+
+aib_build_disk
+^^^^^^^^^^^^^^
+
+.. code-block:: starlark
+
+   aib_build_disk(
+     name = "mydisk",
+     distro = "autosd10",
+     target = "qemu",
+     arch = "x86_64",
+     aib_builder_image = ":builder",
+     aib_bootc_image = ":example",
+     aib_script = ":aib_build_script_gen",
+     oci_runtime = "podman"
+  )
+
+This rule will create a disk file (qcow2, img, etc) that can be fleshed into a platform, be it physical or virtual.
+
+It requires the resulting artfiacts of the previous build rules: ``aib_build_builder`` and ``aib_build_image``.
+
+.. csv-table:: 
+   :header: "field", "Required", "Default Value", "Description"
+   :widths: 20, 10, 25, 40
+
+   "distro", "false", "autosd10", "Target distro to use"
+   "target", "true", "N/A", "Target platform to build to (QEMU, specific HW, etc)"
+   "arch", "true", "N/A", "Target image architecture (x86_64, aarch64)"
+   "aib_builder_image", "true", "N/A", "Label used to create a builder image with aib_build_builder"
+   "aib_bootc_image", "true", "N/A", "Label used to create a bootc image with aib_build_image" 
+   "aib_script", "true", "N/A", "The generates AIB script to use (usually from aib_script rule)"
+   "oci_runtime", false, "podman", "OCI runtime (podman, docker, etc) in order to run the container that builds the disk image"
+
+The disk image filename will use the following format: ``score-autosd-$label_name-$distro-$target-$arch.$ext``.
+The file extension will be determined based on the target.
+
+Full Example
 ************
+
+A full working example can be found at: https://github.com/eclipse-score/os_autosd/tree/main/examples/aib.
+
+MODULE.bazel
+^^^^^^^^^^^^
 
 .. code-block:: starlark
 
@@ -168,71 +305,68 @@ MODULE.bazel
    )
 
 BUILD.bazel
-***********
+^^^^^^^^^^^^
 
 .. code-block:: starlark
 
-   load("@os_autosd//toolchain/aib:defs.bzl", "aib_build", "aib_build_builder", "aib_manifest")
-   
-   aib_build_builder(
-       name = "builder",
-       image_name = "autosd-builder",
-   )
-   
-   genrule(
-       name = "generated_config",
-       outs = ["generated.conf"],
-       cmd = "echo 'MESSAGE=\"Generated by Bazel\"' > $@",
-   )
-   
-   aib_manifest(
-       name = "manifest",
-       srcs = [":generated_config"],
-       content_add_files = {
-           "/etc/generated.conf": [
-               "source_path=$(location :generated_config)",
-           ],
-       },
-       content_rpms = [
-           "bind-utils",
-           "ethtool",
-           "iperf3",
-           "iproute",
-           "iputils",
-           "iw",
-           "less",
-           "lsof",
-           "mtr",
-           "nc",
-           "net-tools",
-           "nmap",
-           "openssh-server",
-           "rsync",
-           "socat",
-           "sudo",
-           "tar",
-           "tcpdump",
-           "traceroute",
-           "vi",
-           "whois",
-       ],
-       image_hostname = "localhost",
-       image_name = "autosd-qemu-package",
-       image_selinux_mode = "enforcing",
-   )
-   
-   aib_build(
-       name = "image",
-       builder = ":builder",
-       manifest = ":manifest",
+   load("@os_autosd//toolchain/aib:defs.bzl", "aib_script", "aib_build_builder", "aib_build_image", "aib_build_disk")
+
+   aib_script(
+     name = "aib_build_script",
    )
 
+   aib_build_builder(
+     name = "builder",
+     aib_script = ":aib_build_script",
+     arch = "x86_64",
+     distro = "autosd10",
+   )
+
+   filegroup(
+     name = "image_files",
+     srcs = glob(["image_files/**"]),
+   )
+   
+   aib_build_image(
+     name = "container-bootc",
+     aib_define_files = [
+         "//common_files:vars.yml",
+         "//common_files:vars-devel.yml",
+     ],
+     aib_include_dirs = [
+         ":image_files",
+     ],
+     aib_manifest = ":image.aib.yml",
+     aib_script = "//images:aib_build_script",
+     arch = "x86_64",
+     distro = "autosd10",
+     target = "qemu",
+   )
+   
+   aib_build_disk(
+     name = "container-disk",
+     aib_bootc_image = ":container-bootc",
+     aib_builder_image = "//images:builder",
+     aib_script = "//images:aib_build_script",
+     arch = "x86_64",
+     distro = "autosd10",
+     target = "qemu",
+   )
 
 Building
 ********
 
+The following command will generate a disk file that can be used with QEMU: 
+
 .. code-block:: bash
 
-   $ bazel build //:image
+   $ bazel build //:container-disk
 
+Known Limitations
+*****************
 
+There are a few limitations when building AutoSD images from scratch using Bazel:
+
+- Podman/Docker usage is not isolated in Bazel's sysroot, it uses the user's container storage;
+- No cross architecture support: The generated image needs to match the architecture of the system that is running Bazel;
+- SELinux Rules generation: Bazel needs to be executed as root if an image is generating SELinux rules; pending patch to fix: https://github.com/osbuild/osbuild/pull/2552.

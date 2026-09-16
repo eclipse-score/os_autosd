@@ -1,0 +1,43 @@
+name: "bazel-aib-integration"
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: "examples/aib"
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # only building one use-case due to CI resources
+          - bazel_target: "//images/simple:simple-qemu"
+            # - bazel_target: "//images/container:container-disk"
+
+    name: "${{ matrix.bazel_target }}"
+    steps:
+      - name: "Clean disk space"
+        uses: "eclipse-score/more-disk-space@v1"
+
+      - name: "Checkout repository"
+        uses: "actions/checkout@v7"
+
+      - name: "Setup Bazel"
+        uses: "bazel-contrib/setup-bazel@0.18.0"
+        with:
+          bazelisk-cache: true
+          disk-cache: "${{ github.workflow }}"
+          repository-cache: true
+          cache-save: false
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y podman
+
+      - name: "Build"
+        run: "sudo bazel build --verbose_failures ${{ matrix.bazel_target }}"

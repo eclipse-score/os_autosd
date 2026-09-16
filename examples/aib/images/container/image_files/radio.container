@@ -1,0 +1,14 @@
+[Unit]
+Description=Demo engine service container
+Requires=routingmanagerd.service
+
+[Container]
+Image=localhost/auto-apps
+Volume=/run/vsomeip:/run/vsomeip
+Exec=/usr/bin/engine-service
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
