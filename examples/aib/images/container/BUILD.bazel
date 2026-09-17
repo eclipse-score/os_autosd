@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2025 Contributors to the Eclipse Foundation
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -10,38 +10,37 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-load("@os_autosd//toolchain/aib:defs.bzl", "aib_build_builder", "aib_build_disk", "aib_build_image", "aib_script")
+load("@os_autosd//toolchain/aib:defs.bzl", "aib_build_disk", "aib_build_image")
 
-aib_script(
-    name = "aib_build_script",
-)
-
-aib_build_builder(
-    name = "builder",
-    aib_script = ":aib_build_script",
-    arch = "x86_64",
-    distro = "autosd10",
+filegroup(
+    name = "image_files",
+    srcs = glob(["image_files/**"]),
 )
 
 aib_build_image(
-    name = "simple",
+    name = "container-bootc",
     aib_define_files = [
-        "//files:vars.yml",
-        "//files:vars-devel.yml",
+        "//common_files:vars.yml",
+        "//common_files:vars-devel.yml",
     ],
-    aib_manifest = "//files:simple.aib.yml",
-    aib_script = ":aib_build_script",
+    aib_include_dirs = [
+        ":image_files",
+    ],
+    aib_manifest = ":image.aib.yml",
+    aib_script = "//images:aib_build_script",
     arch = "x86_64",
     distro = "autosd10",
     target = "qemu",
 )
 
 aib_build_disk(
-    name = "simple-qemu",
-    aib_bootc_image = ":simple",
-    aib_builder_image = ":builder",
-    aib_script = ":aib_build_script",
+    name = "container-disk",
+    aib_bootc_image = ":container-bootc",
+    aib_builder_image = "//images:builder",
+    aib_script = "//images:aib_build_script",
     arch = "x86_64",
     distro = "autosd10",
     target = "qemu",
 )
+
+package(default_visibility = ["//visibility:public"])

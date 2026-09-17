@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # *******************************************************************************
 # Copyright (c) 2026 Contributors to the Eclipse Foundation
 #
@@ -11,12 +13,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("//toolchain/aib/private:aib_build_builder.bzl", _aib_build_builder = "aib_build_builder")
-load("//toolchain/aib/private:aib_build_disk.bzl", _aib_build_disk = "aib_build_disk")
-load("//toolchain/aib/private:aib_build_image.bzl", _aib_build_image = "aib_build_image")
-load("//toolchain/aib/private:aib_script.bzl", _aib_script = "aib_script")
+set -euo pipefail
 
-aib_script = _aib_script
-aib_build_builder = _aib_build_builder
-aib_build_image = _aib_build_image
-aib_build_disk = _aib_build_disk
+{{AIB_SCRIPT}} build-builder \
+--distro {{IMG_DISTRO}} \
+--arch {{IMG_ARCH}} \
+--oci-archive {{AIB_OUTPUT}}

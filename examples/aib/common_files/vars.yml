@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2026 Contributors to the Eclipse Foundation
+# Copyright (c) 2025 Contributors to the Eclipse Automotive Integration for AutoSD project
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -10,22 +10,4 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-
-package(default_visibility = ["//:__subpackages__"])
-
-bzl_library(
-    name = "aib_rule",
-    srcs = [
-        "aib_build_builder.bzl",
-        "aib_build_disk.bzl",
-        "aib_script.bzl",
-    ],
-)
-
-exports_files([
-    "aib_script.bzl",
-    "aib_build_builder.bzl",
-    "aib_build_image.bzl",
-    "aib_build_disk.bzl",
-])
+disable_ipv6: false
