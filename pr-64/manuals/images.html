@@ -547,8 +547,264 @@ The <strong>os_autosd</strong> module needs to be used as a Bazel direct depende
 <p>The Bazel rule uses <a class="reference external" href="https://sigs.centos.org/automotive/latest/getting-started/about-automotive-image-builder.html">automotive-image-builder(AIB)</a>,
 a tool provided by the CentOS Automotive SIG to build AutoSD images.</p>
 <p>NOTE: AIB does not support cross-compilation.</p>
+<section id="bazel-rules">
+<h3>Bazel Rules<a class="headerlink" href="#bazel-rules" title="Link to this heading">#</a></h3>
+<section id="aib-script">
+<h4>aib_script<a class="headerlink" href="#aib-script" title="Link to this heading">#</a></h4>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">aib_script</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;aib_build_script_gen&quot;</span><span class="p">,</span>
+  <span class="n">oci_image</span> <span class="o">=</span> <span class="s2">&quot;quay.io/centos-sig-automotive/automotive-image-builder:latest&quot;</span><span class="p">,</span>
+  <span class="n">oci_runtime</span> <span class="o">=</span> <span class="s2">&quot;podman&quot;</span>
+<span class="p">)</span>
+
+<span class="n">aib_script</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;aib_build_script_static&quot;</span><span class="p">,</span>
+  <span class="n">script_path</span> <span class="o">=</span> <span class="s2">&quot;:my_aib_sh&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This rule will generate or use an existing shell script to invoke Automotive Image Builder, the rule itself runs an OCI
+container using this image: :code: <code class="docutils literal notranslate"><span class="pre">quay.io/centos-sig-automotive/automotive-image-builder:latest</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 21.1%" />
+<col style="width: 10.5%" />
+<col style="width: 26.3%" />
+<col style="width: 42.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>field</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>script_path</p></td>
+<td><p>false</p></td>
+<td><p>null</p></td>
+<td><p>An optional label to point to an existing aib script (it will generate a new one if omitted)</p></td>
+</tr>
+<tr class="row-odd"><td><p>oci_image</p></td>
+<td><p>false</p></td>
+<td><p>quay.io/centos-sig-automotive/automotive-image-builder:latest</p></td>
+<td><p>OCI image to use in order to generate a new script</p></td>
+</tr>
+<tr class="row-even"><td><p>oci_runtime</p></td>
+<td><p>false</p></td>
+<td><p>podman</p></td>
+<td><p>oci runtime (podman, docker, etc) in order to run the container that generates a new aib script</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="aib-build-builder">
+<h4>aib_build_builder<a class="headerlink" href="#aib-build-builder" title="Link to this heading">#</a></h4>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">aib_build_builder</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;builder&quot;</span><span class="p">,</span>
+  <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+  <span class="n">distro</span> <span class="o">=</span> <span class="s2">&quot;autosd10&quot;</span><span class="p">,</span>
+  <span class="n">aib_script</span> <span class="o">=</span> <span class="s2">&quot;:aib_build_script&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This rulle will create an OCI archive (container image) that is used to generate a disk image (.qcow2, .img, etc).</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 21.1%" />
+<col style="width: 10.5%" />
+<col style="width: 26.3%" />
+<col style="width: 42.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>field</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>distro</p></td>
+<td><p>false</p></td>
+<td><p>autosd10</p></td>
+<td><p>Target distro to use (autosd10, autosd10-sig)</p></td>
+</tr>
+<tr class="row-odd"><td><p>arch</p></td>
+<td><p>false</p></td>
+<td><p>x86_64</p></td>
+<td><p>Target image architecture (x86_64, aarch64)</p></td>
+</tr>
+<tr class="row-even"><td><p>aib_script</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>The generates AIB script to use (usually from aib_script rule)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The archive name will use the following name format: <code class="docutils literal notranslate"><span class="pre">score-autosd-$label_name-builder-$distro-$arch.oci</span></code>.</p>
+</section>
+<section id="aib-build-image">
+<h4>aib_build_image<a class="headerlink" href="#aib-build-image" title="Link to this heading">#</a></h4>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span> <span class="n">aib_build_image</span><span class="p">(</span>
+   <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;example&quot;</span><span class="p">,</span>
+   <span class="n">distro</span> <span class="o">=</span> <span class="s2">&quot;autosd10&quot;</span><span class="p">,</span>
+   <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;qemu&quot;</span><span class="p">,</span>
+   <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+   <span class="n">aib_script</span> <span class="o">=</span> <span class="s2">&quot;:aib_build_script_gen&quot;</span><span class="p">,</span>
+   <span class="n">aib_define_files</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="s2">&quot;//common_files:vars.yml&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;//common_files:vars-devel.yml&quot;</span><span class="p">,</span>
+   <span class="p">],</span>
+   <span class="n">aib_include_dirs</span> <span class="o">=</span> <span class="p">[</span>
+       <span class="s2">&quot;:image_files&quot;</span><span class="p">,</span>
+   <span class="p">],</span>
+   <span class="n">aib_manifest</span> <span class="o">=</span> <span class="s2">&quot;:image.aib.yml&quot;</span><span class="p">,</span>
+   <span class="n">oci_runtime</span> <span class="o">=</span> <span class="s2">&quot;podman&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This rule will create an AutoSD bootc image (OCI archive as well), which contains all the packages and files of a
+disk image. This OCI archive will be used later to genereate a disk image file.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 21.1%" />
+<col style="width: 10.5%" />
+<col style="width: 26.3%" />
+<col style="width: 42.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>field</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>distro</p></td>
+<td><p>false</p></td>
+<td><p>autosd10</p></td>
+<td><p>Target distro to use (autosd10, autosd10-sig)</p></td>
+</tr>
+<tr class="row-odd"><td><p>target</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>Target platform to build to (QEMU, specific HW, etc)</p></td>
+</tr>
+<tr class="row-even"><td><p>arch</p></td>
+<td><p>false</p></td>
+<td><p>x86_64</p></td>
+<td><p>Target image architecture (x86_64, aarch64)</p></td>
+</tr>
+<tr class="row-odd"><td><p>aib_script</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>The generates AIB script to use (usually from aib_script rule)</p></td>
+</tr>
+<tr class="row-even"><td><p>aib_manifest</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>The AIB manifest file to use to generate an image</p></td>
+</tr>
+<tr class="row-odd"><td><p>aib_define_files</p></td>
+<td><p>false</p></td>
+<td><p>[]</p></td>
+<td><p>The list of variable files (YAML format) to be used by AIB</p></td>
+</tr>
+<tr class="row-even"><td><p>aib_include_dirs</p></td>
+<td><p>false</p></td>
+<td><p>[]</p></td>
+<td><p>The list of directories to be includes when building an image, this is required to copy files to an AutoSD image</p></td>
+</tr>
+<tr class="row-odd"><td><p>oci_runtime</p></td>
+<td><p>false</p></td>
+<td><p>podman</p></td>
+<td><p>oci runtime (podman, docker, etc) in order to run the container that builds the OCI archive</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The archive name will use the following name format: <code class="docutils literal notranslate"><span class="pre">score-autosd-$label_name-bootc-$distro-$arch.oci</span></code></p>
+</section>
+<section id="aib-build-disk">
+<h4>aib_build_disk<a class="headerlink" href="#aib-build-disk" title="Link to this heading">#</a></h4>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span> <span class="n">aib_build_disk</span><span class="p">(</span>
+   <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;mydisk&quot;</span><span class="p">,</span>
+   <span class="n">distro</span> <span class="o">=</span> <span class="s2">&quot;autosd10&quot;</span><span class="p">,</span>
+   <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;qemu&quot;</span><span class="p">,</span>
+   <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+   <span class="n">aib_builder_image</span> <span class="o">=</span> <span class="s2">&quot;:builder&quot;</span><span class="p">,</span>
+   <span class="n">aib_bootc_image</span> <span class="o">=</span> <span class="s2">&quot;:example&quot;</span><span class="p">,</span>
+   <span class="n">aib_script</span> <span class="o">=</span> <span class="s2">&quot;:aib_build_script_gen&quot;</span><span class="p">,</span>
+   <span class="n">oci_runtime</span> <span class="o">=</span> <span class="s2">&quot;podman&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This rule will create a disk file (qcow2, img, etc) that can be fleshed into a platform, be it physical or virtual.</p>
+<p>It requires the resulting artfiacts of the previous build rules: <code class="docutils literal notranslate"><span class="pre">aib_build_builder</span></code> and <code class="docutils literal notranslate"><span class="pre">aib_build_image</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 21.1%" />
+<col style="width: 10.5%" />
+<col style="width: 26.3%" />
+<col style="width: 42.1%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>field</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>distro</p></td>
+<td><p>false</p></td>
+<td><p>autosd10</p></td>
+<td><p>Target distro to use (autosd10, autosd10-sig)</p></td>
+</tr>
+<tr class="row-odd"><td><p>target</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>Target platform to build to (QEMU, specific HW, etc)</p></td>
+</tr>
+<tr class="row-even"><td><p>arch</p></td>
+<td><p>false</p></td>
+<td><p>x86_64</p></td>
+<td><p>Target image architecture (x86_64, aarch64)</p></td>
+</tr>
+<tr class="row-odd"><td><p>aib_builder_image</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>label used to create a builder image with aib_build_builder</p></td>
+</tr>
+<tr class="row-even"><td><p>aib_bootc_image</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>label used to create a bootc image with aib_build_image</p></td>
+</tr>
+<tr class="row-odd"><td><p>aib_script</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
+<td><p>The generates AIB script to use (usually from aib_script rule)</p></td>
+</tr>
+<tr class="row-even"><td><p>oci_runtime</p></td>
+<td><p>false</p></td>
+<td><p>podman</p></td>
+<td><p>oci runtime (podman, docker, etc) in order to run the container that builds the disk image</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The disk image filename will use the following format: <code class="docutils literal notranslate"><span class="pre">score-autosd-$label_name-$distro-$target-$arch.$ext</span></code>.
+The file extension will be determined based on the target.</p>
+</section>
+</section>
+<section id="full-example">
+<h3>Full Example<a class="headerlink" href="#full-example" title="Link to this heading">#</a></h3>
+<p>A full working example can be found at: <a class="reference external" href="https://github.com/eclipse-score/os_autosd/tree/main/examples/aib">https://github.com/eclipse-score/os_autosd/tree/main/examples/aib</a>.</p>
 <section id="module-bazel">
-<h3>MODULE.bazel<a class="headerlink" href="#module-bazel" title="Link to this heading">#</a></h3>
+<h4>MODULE.bazel<a class="headerlink" href="#module-bazel" title="Link to this heading">#</a></h4>
 <div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">module</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;os_autosd_aib_example&quot;</span><span class="p">)</span>
 
 <span class="n">bazel_dep</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;os_autosd&quot;</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;0.0.0&quot;</span><span class="p">)</span>
@@ -561,69 +817,69 @@ a tool provided by the CentOS Automotive SIG to build AutoSD images.</p>
 </div>
 </section>
 <section id="build-bazel">
-<h3>BUILD.bazel<a class="headerlink" href="#build-bazel" title="Link to this heading">#</a></h3>
-<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;@os_autosd//toolchain/aib:defs.bzl&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_manifest&quot;</span><span class="p">)</span>
+<h4>BUILD.bazel<a class="headerlink" href="#build-bazel" title="Link to this heading">#</a></h4>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;@os_autosd//toolchain/aib:defs.bzl&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_script&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder, &quot;</span><span class="n">aib_build_disk</span><span class="s2">&quot;)</span>
+
+<span class="n">aib_script</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;aib_build_script&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">aib_build_builder</span><span class="p">(</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;builder&quot;</span><span class="p">,</span>
-    <span class="n">image_name</span> <span class="o">=</span> <span class="s2">&quot;autosd-builder&quot;</span><span class="p">,</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;builder&quot;</span><span class="p">,</span>
+  <span class="n">aib_script</span> <span class="o">=</span> <span class="s2">&quot;:aib_build_script&quot;</span><span class="p">,</span>
+  <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+  <span class="n">distro</span> <span class="o">=</span> <span class="s2">&quot;autosd10&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">genrule</span><span class="p">(</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;generated_config&quot;</span><span class="p">,</span>
-    <span class="n">outs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;generated.conf&quot;</span><span class="p">],</span>
-    <span class="n">cmd</span> <span class="o">=</span> <span class="s2">&quot;echo &#39;MESSAGE=</span><span class="se">\&quot;</span><span class="s2">Generated by Bazel</span><span class="se">\&quot;</span><span class="s2">&#39; &gt; $@&quot;</span><span class="p">,</span>
+<span class="n">filegroup</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;image_files&quot;</span><span class="p">,</span>
+  <span class="n">srcs</span> <span class="o">=</span> <span class="n">glob</span><span class="p">([</span><span class="s2">&quot;image_files/**&quot;</span><span class="p">]),</span>
 <span class="p">)</span>
 
-<span class="n">aib_manifest</span><span class="p">(</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;manifest&quot;</span><span class="p">,</span>
-    <span class="n">srcs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;:generated_config&quot;</span><span class="p">],</span>
-    <span class="n">content_add_files</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;/etc/generated.conf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;source_path=$(location :generated_config)&quot;</span><span class="p">,</span>
-        <span class="p">],</span>
-    <span class="p">},</span>
-    <span class="n">content_rpms</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;bind-utils&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ethtool&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;iperf3&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;iproute&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;iputils&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;iw&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;less&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;lsof&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;mtr&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;nc&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;net-tools&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;nmap&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;openssh-server&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;rsync&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;socat&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;sudo&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;tar&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;tcpdump&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;traceroute&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;vi&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;whois&quot;</span><span class="p">,</span>
-    <span class="p">],</span>
-    <span class="n">image_hostname</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
-    <span class="n">image_name</span> <span class="o">=</span> <span class="s2">&quot;autosd-qemu-package&quot;</span><span class="p">,</span>
-    <span class="n">image_selinux_mode</span> <span class="o">=</span> <span class="s2">&quot;enforcing&quot;</span><span class="p">,</span>
+<span class="n">aib_build_image</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;container-bootc&quot;</span><span class="p">,</span>
+  <span class="n">aib_define_files</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s2">&quot;//common_files:vars.yml&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;//common_files:vars-devel.yml&quot;</span><span class="p">,</span>
+  <span class="p">],</span>
+  <span class="n">aib_include_dirs</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="s2">&quot;:image_files&quot;</span><span class="p">,</span>
+  <span class="p">],</span>
+  <span class="n">aib_manifest</span> <span class="o">=</span> <span class="s2">&quot;:image.aib.yml&quot;</span><span class="p">,</span>
+  <span class="n">aib_script</span> <span class="o">=</span> <span class="s2">&quot;//images:aib_build_script&quot;</span><span class="p">,</span>
+  <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+  <span class="n">distro</span> <span class="o">=</span> <span class="s2">&quot;autosd10&quot;</span><span class="p">,</span>
+  <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;qemu&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">aib_build</span><span class="p">(</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span>
-    <span class="n">builder</span> <span class="o">=</span> <span class="s2">&quot;:builder&quot;</span><span class="p">,</span>
-    <span class="n">manifest</span> <span class="o">=</span> <span class="s2">&quot;:manifest&quot;</span><span class="p">,</span>
+<span class="n">aib_build_disk</span><span class="p">(</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;container-disk&quot;</span><span class="p">,</span>
+  <span class="n">aib_bootc_image</span> <span class="o">=</span> <span class="s2">&quot;:container-bootc&quot;</span><span class="p">,</span>
+  <span class="n">aib_builder_image</span> <span class="o">=</span> <span class="s2">&quot;//images:builder&quot;</span><span class="p">,</span>
+  <span class="n">aib_script</span> <span class="o">=</span> <span class="s2">&quot;//images:aib_build_script&quot;</span><span class="p">,</span>
+  <span class="n">arch</span> <span class="o">=</span> <span class="s2">&quot;x86_64&quot;</span><span class="p">,</span>
+  <span class="n">distro</span> <span class="o">=</span> <span class="s2">&quot;autosd10&quot;</span><span class="p">,</span>
+  <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;qemu&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </section>
+</section>
 <section id="building">
 <h3>Building<a class="headerlink" href="#building" title="Link to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>bazel<span class="w"> </span>build<span class="w"> </span>//:image
+<p>The following command will generate a disk file that can be used with QEMU:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>bazel<span class="w"> </span>build<span class="w"> </span>//:container-disk
 </pre></div>
 </div>
+</section>
+<section id="known-limitations">
+<h3>Known Limitations<a class="headerlink" href="#known-limitations" title="Link to this heading">#</a></h3>
+<p>There are a few limitations when building AutoSD images from scratch using Bazel:</p>
+<ul class="simple">
+<li><p>Podman/Docker usage is not isolated in Bazel’s sysroot, it uses the user’s container storage;</p></li>
+<li><p>No cross arch. support: The generated image needs to match the arch. of the system that is running Bazel;</p></li>
+<li><p>SELinux Rules generation: Bazel needs to be executed as root if an image is generating SELinux rules; pending patch to fix: <a class="reference external" href="https://github.com/osbuild/osbuild/pull/2552">https://github.com/osbuild/osbuild/pull/2552</a>.</p></li>
+</ul>
 </section>
 </section>
 </section>
@@ -682,9 +938,20 @@ a tool provided by the CentOS Automotive SIG to build AutoSD images.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-disk-images-with-bazel">Building Disk Images with Bazel</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-bazel">MODULE.bazel</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-bazel">BUILD.bazel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bazel-rules">Bazel Rules</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#aib-script">aib_script</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#aib-build-builder">aib_build_builder</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#aib-build-image">aib_build_image</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#aib-build-disk">aib_build_disk</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#full-example">Full Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#module-bazel">MODULE.bazel</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#build-bazel">BUILD.bazel</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#building">Building</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#known-limitations">Known Limitations</a></li>
 </ul>
 </li>
 </ul>
