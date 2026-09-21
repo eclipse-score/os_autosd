@@ -632,8 +632,8 @@ container using this image: :code: <code class="docutils literal notranslate"><s
 <td><p>Target distro to use</p></td>
 </tr>
 <tr class="row-odd"><td><p>arch</p></td>
-<td><p>false</p></td>
-<td><p>x86_64</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
 <td><p>Target image architecture (x86_64, aarch64)</p></td>
 </tr>
 <tr class="row-even"><td><p>aib_script</p></td>
@@ -694,8 +694,8 @@ disk image. This OCI archive will be used later to genereate a disk image file.<
 <td><p>Target platform to build to (QEMU, specific HW, etc)</p></td>
 </tr>
 <tr class="row-even"><td><p>arch</p></td>
-<td><p>false</p></td>
-<td><p>x86_64</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
 <td><p>Target image architecture (x86_64, aarch64)</p></td>
 </tr>
 <tr class="row-odd"><td><p>aib_script</p></td>
@@ -770,8 +770,8 @@ disk image. This OCI archive will be used later to genereate a disk image file.<
 <td><p>Target platform to build to (QEMU, specific HW, etc)</p></td>
 </tr>
 <tr class="row-even"><td><p>arch</p></td>
-<td><p>false</p></td>
-<td><p>x86_64</p></td>
+<td><p>true</p></td>
+<td><p>N/A</p></td>
 <td><p>Target image architecture (x86_64, aarch64)</p></td>
 </tr>
 <tr class="row-odd"><td><p>aib_builder_image</p></td>
@@ -819,7 +819,7 @@ The file extension will be determined based on the target.</p>
 </section>
 <section id="build-bazel">
 <h4>BUILD.bazel<a class="headerlink" href="#build-bazel" title="Link to this heading">#</a></h4>
-<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;@os_autosd//toolchain/aib:defs.bzl&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_script&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder, &quot;</span><span class="n">aib_build_disk</span><span class="s2">&quot;)</span>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;@os_autosd//toolchain/aib:defs.bzl&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_script&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_image&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_disk&quot;</span><span class="p">)</span>
 
 <span class="n">aib_script</span><span class="p">(</span>
   <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;aib_build_script&quot;</span><span class="p">,</span>

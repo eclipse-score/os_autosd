@@ -205,7 +205,7 @@ This rulle will create an OCI archive (container image) that is used to generate
    :widths: 20, 10, 25, 40
 
    "distro", "false", "autosd10", "Target distro to use"
-   "arch", "false", "x86_64", "Target image architecture (x86_64, aarch64)"
+   "arch", "true", "N/A", "Target image architecture (x86_64, aarch64)"
    "aib_script", "true", "N/A", "The generated AIB script to use (usually from aib_script rule)"
 
 The archive name will use the following name format: ``score-autosd-$label_name-builder-$distro-$arch.oci``.
@@ -241,7 +241,7 @@ disk image. This OCI archive will be used later to genereate a disk image file.
 
    "distro", "false", "autosd10", "Target distro to use"
    "target", "true", "N/A", "Target platform to build to (QEMU, specific HW, etc)"
-   "arch", "false", "x86_64", "Target image architecture (x86_64, aarch64)"
+   "arch", "true", "N/A", "Target image architecture (x86_64, aarch64)"
    "aib_script", "true", "N/A", "The generated AIB script to use (usually from aib_script rule)"
    "aib_manifest", "true", "N/A", "The AIB manifest file to use to generate an image"
    "aib_define_files", "false", [], "The list of variable files (YAML format) to be used by AIB"
@@ -276,7 +276,7 @@ It requires the resulting artfiacts of the previous build rules: ``aib_build_bui
 
    "distro", "false", "autosd10", "Target distro to use"
    "target", "true", "N/A", "Target platform to build to (QEMU, specific HW, etc)"
-   "arch", "false", "x86_64", "Target image architecture (x86_64, aarch64)"
+   "arch", "true", "N/A", "Target image architecture (x86_64, aarch64)"
    "aib_builder_image", "true", "N/A", "Label used to create a builder image with aib_build_builder"
    "aib_bootc_image", "true", "N/A", "Label used to create a bootc image with aib_build_image" 
    "aib_script", "true", "N/A", "The generates AIB script to use (usually from aib_script rule)"
@@ -309,7 +309,7 @@ BUILD.bazel
 
 .. code-block:: starlark
 
-   load("@os_autosd//toolchain/aib:defs.bzl", "aib_script", "aib_build_builder", "aib_build_builder, "aib_build_disk")
+   load("@os_autosd//toolchain/aib:defs.bzl", "aib_script", "aib_build_builder", "aib_build_image", "aib_build_disk")
 
    aib_script(
      name = "aib_build_script",
