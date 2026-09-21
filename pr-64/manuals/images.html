@@ -547,6 +547,7 @@ The <strong>os_autosd</strong> module needs to be used as a Bazel direct depende
 <p>The Bazel rule uses <a class="reference external" href="https://sigs.centos.org/automotive/latest/getting-started/about-automotive-image-builder.html">automotive-image-builder(AIB)</a>,
 a tool provided by the CentOS Automotive SIG to build AutoSD images.</p>
 <p>NOTE: AIB does not support cross-compilation.</p>
+<p>NOTE: The list of available distros to use is available at: <a class="reference external" href="https://gitlab.com/CentOS/automotive/src/automotive-image-builder/-/tree/main/distro?ref_type=heads">https://gitlab.com/CentOS/automotive/src/automotive-image-builder/-/tree/main/distro?ref_type=heads</a></p>
 <section id="bazel-rules">
 <h3>Bazel Rules<a class="headerlink" href="#bazel-rules" title="Link to this heading">#</a></h3>
 <section id="aib-script">
@@ -628,7 +629,7 @@ container using this image: :code: <code class="docutils literal notranslate"><s
 <tr class="row-even"><td><p>distro</p></td>
 <td><p>false</p></td>
 <td><p>autosd10</p></td>
-<td><p>Target distro to use (autosd10, autosd10-sig)</p></td>
+<td><p>Target distro to use</p></td>
 </tr>
 <tr class="row-odd"><td><p>arch</p></td>
 <td><p>false</p></td>
@@ -638,7 +639,7 @@ container using this image: :code: <code class="docutils literal notranslate"><s
 <tr class="row-even"><td><p>aib_script</p></td>
 <td><p>true</p></td>
 <td><p>N/A</p></td>
-<td><p>The generates AIB script to use (usually from aib_script rule)</p></td>
+<td><p>The generated AIB script to use (usually from aib_script rule)</p></td>
 </tr>
 </tbody>
 </table>
@@ -685,7 +686,7 @@ disk image. This OCI archive will be used later to genereate a disk image file.<
 <tr class="row-even"><td><p>distro</p></td>
 <td><p>false</p></td>
 <td><p>autosd10</p></td>
-<td><p>Target distro to use (autosd10, autosd10-sig)</p></td>
+<td><p>Target distro to use</p></td>
 </tr>
 <tr class="row-odd"><td><p>target</p></td>
 <td><p>true</p></td>
@@ -700,7 +701,7 @@ disk image. This OCI archive will be used later to genereate a disk image file.<
 <tr class="row-odd"><td><p>aib_script</p></td>
 <td><p>true</p></td>
 <td><p>N/A</p></td>
-<td><p>The generates AIB script to use (usually from aib_script rule)</p></td>
+<td><p>The generated AIB script to use (usually from aib_script rule)</p></td>
 </tr>
 <tr class="row-even"><td><p>aib_manifest</p></td>
 <td><p>true</p></td>
@@ -761,7 +762,7 @@ disk image. This OCI archive will be used later to genereate a disk image file.<
 <tr class="row-even"><td><p>distro</p></td>
 <td><p>false</p></td>
 <td><p>autosd10</p></td>
-<td><p>Target distro to use (autosd10, autosd10-sig)</p></td>
+<td><p>Target distro to use</p></td>
 </tr>
 <tr class="row-odd"><td><p>target</p></td>
 <td><p>true</p></td>
@@ -776,12 +777,12 @@ disk image. This OCI archive will be used later to genereate a disk image file.<
 <tr class="row-odd"><td><p>aib_builder_image</p></td>
 <td><p>true</p></td>
 <td><p>N/A</p></td>
-<td><p>label used to create a builder image with aib_build_builder</p></td>
+<td><p>Label used to create a builder image with aib_build_builder</p></td>
 </tr>
 <tr class="row-even"><td><p>aib_bootc_image</p></td>
 <td><p>true</p></td>
 <td><p>N/A</p></td>
-<td><p>label used to create a bootc image with aib_build_image</p></td>
+<td><p>Label used to create a bootc image with aib_build_image</p></td>
 </tr>
 <tr class="row-odd"><td><p>aib_script</p></td>
 <td><p>true</p></td>
@@ -791,7 +792,7 @@ disk image. This OCI archive will be used later to genereate a disk image file.<
 <tr class="row-even"><td><p>oci_runtime</p></td>
 <td><p>false</p></td>
 <td><p>podman</p></td>
-<td><p>oci runtime (podman, docker, etc) in order to run the container that builds the disk image</p></td>
+<td><p>OCI runtime (podman, docker, etc) in order to run the container that builds the disk image</p></td>
 </tr>
 </tbody>
 </table>
@@ -877,7 +878,7 @@ The file extension will be determined based on the target.</p>
 <p>There are a few limitations when building AutoSD images from scratch using Bazel:</p>
 <ul class="simple">
 <li><p>Podman/Docker usage is not isolated in Bazel’s sysroot, it uses the user’s container storage;</p></li>
-<li><p>No cross arch. support: The generated image needs to match the arch. of the system that is running Bazel;</p></li>
+<li><p>No cross architecture support: The generated image needs to match the architecture of the system that is running Bazel;</p></li>
 <li><p>SELinux Rules generation: Bazel needs to be executed as root if an image is generating SELinux rules; pending patch to fix: <a class="reference external" href="https://github.com/osbuild/osbuild/pull/2552">https://github.com/osbuild/osbuild/pull/2552</a>.</p></li>
 </ul>
 </section>

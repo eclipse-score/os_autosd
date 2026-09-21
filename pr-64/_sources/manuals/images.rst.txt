@@ -153,6 +153,8 @@ a tool provided by the CentOS Automotive SIG to build AutoSD images.
 
 NOTE: AIB does not support cross-compilation.
 
+NOTE: The list of available distros to use is available at: https://gitlab.com/CentOS/automotive/src/automotive-image-builder/-/tree/main/distro?ref_type=heads
+
 Bazel Rules
 ***********
 
@@ -202,9 +204,9 @@ This rulle will create an OCI archive (container image) that is used to generate
    :header: "field", "Required", "Default Value", "Description"
    :widths: 20, 10, 25, 40
 
-   "distro", "false", "autosd10", "Target distro to use (autosd10, autosd10-sig)"
+   "distro", "false", "autosd10", "Target distro to use"
    "arch", "false", "x86_64", "Target image architecture (x86_64, aarch64)"
-   "aib_script", "true", "N/A", "The generates AIB script to use (usually from aib_script rule)"
+   "aib_script", "true", "N/A", "The generated AIB script to use (usually from aib_script rule)"
 
 The archive name will use the following name format: ``score-autosd-$label_name-builder-$distro-$arch.oci``.
 
@@ -237,10 +239,10 @@ disk image. This OCI archive will be used later to genereate a disk image file.
    :header: "field", "Required", "Default Value", "Description"
    :widths: 20, 10, 25, 40
 
-   "distro", "false", "autosd10", "Target distro to use (autosd10, autosd10-sig)"
+   "distro", "false", "autosd10", "Target distro to use"
    "target", "true", "N/A", "Target platform to build to (QEMU, specific HW, etc)"
    "arch", "false", "x86_64", "Target image architecture (x86_64, aarch64)"
-   "aib_script", "true", "N/A", "The generates AIB script to use (usually from aib_script rule)"
+   "aib_script", "true", "N/A", "The generated AIB script to use (usually from aib_script rule)"
    "aib_manifest", "true", "N/A", "The AIB manifest file to use to generate an image"
    "aib_define_files", "false", [], "The list of variable files (YAML format) to be used by AIB"
    "aib_include_dirs", false, [], "The list of directories to be includes when building an image, this is required to copy files to an AutoSD image"
@@ -272,13 +274,13 @@ It requires the resulting artfiacts of the previous build rules: ``aib_build_bui
    :header: "field", "Required", "Default Value", "Description"
    :widths: 20, 10, 25, 40
 
-   "distro", "false", "autosd10", "Target distro to use (autosd10, autosd10-sig)"
+   "distro", "false", "autosd10", "Target distro to use"
    "target", "true", "N/A", "Target platform to build to (QEMU, specific HW, etc)"
    "arch", "false", "x86_64", "Target image architecture (x86_64, aarch64)"
-   "aib_builder_image", "true", "N/A", "label used to create a builder image with aib_build_builder"
-   "aib_bootc_image", "true", "N/A", "label used to create a bootc image with aib_build_image" 
+   "aib_builder_image", "true", "N/A", "Label used to create a builder image with aib_build_builder"
+   "aib_bootc_image", "true", "N/A", "Label used to create a bootc image with aib_build_image" 
    "aib_script", "true", "N/A", "The generates AIB script to use (usually from aib_script rule)"
-   "oci_runtime", false, "podman", "oci runtime (podman, docker, etc) in order to run the container that builds the disk image"
+   "oci_runtime", false, "podman", "OCI runtime (podman, docker, etc) in order to run the container that builds the disk image"
 
 The disk image filename will use the following format: ``score-autosd-$label_name-$distro-$target-$arch.$ext``.
 The file extension will be determined based on the target.
@@ -366,5 +368,5 @@ Known Limitations
 There are a few limitations when building AutoSD images from scratch using Bazel:
 
 - Podman/Docker usage is not isolated in Bazel's sysroot, it uses the user's container storage;
-- No cross arch. support: The generated image needs to match the arch. of the system that is running Bazel;
+- No cross architecture support: The generated image needs to match the architecture of the system that is running Bazel;
 - SELinux Rules generation: Bazel needs to be executed as root if an image is generating SELinux rules; pending patch to fix: https://github.com/osbuild/osbuild/pull/2552.
