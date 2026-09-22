@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+set -euo pipefail
+
+MANIFEST_PATH="$(realpath "{{AIB_MANIFEST}}")"
+MANIFEST_DIR="$(dirname ${MANIFEST_PATH})"
+OCI_ARCHIVE_PATH="$(realpath -m "{{AIB_OUTPUT}}")" 
+OUTPUT_DIR="$(dirname "${OCI_ARCHIVE_PATH}")"
+
+mkdir -p ${OUTPUT_DIR}
+
+declare -A AIB_DEFINE_FILES_VOLUME_ARGS_ADDED
+AIB_DEFINE_FILES_ARGS=()
+AIB_DEFINE_FILES_VOLUME_ARGS=()
+for f in {{AIB_DEFINE_FILES}}; do
+    rf="$(realpath "$f")"
+    AIB_DEFINE_FILES_ARGS+=(--define-file=${rf})
+    d="$(dirname "$rf")"
+    if [[ -z "${AIB_DEFINE_FILES_VOLUME_ARGS_ADDED[$d]:-}" ]]; then
+        AIB_DEFINE_FILES_VOLUME_ARGS_ADDED[$d]=1    
+        AIB_DEFINE_FILES_VOLUME_ARGS+=(--volume "$(dirname "$rf")")
+    fi
+done
+
+{{AIB_SCRIPT}} --volume ${OUTPUT_DIR} --volume ${MANIFEST_DIR} ${AIB_DEFINE_FILES_VOLUME_ARGS[@]} \
+build ${AIB_DEFINE_FILES_ARGS[@]} \
+--distro {{IMG_DISTRO}} \
+--arch {{IMG_ARCH}} \
+--target {{IMG_TARGET}} \
+--reproducible \
+--oci-archive \
+${MANIFEST_PATH} ${OCI_ARCHIVE_PATH}

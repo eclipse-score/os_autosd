@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2025 Contributors to the Eclipse Foundation
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -10,11 +10,13 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-package(default_visibility = ["//private:__pkg__"])
+package(default_visibility = ["//toolchain/aib/private:__pkg__"])
 
 exports_files(
     [
-        "build_builder.sh.tpl",
-        "build_image.sh.tpl",
+        "aib_script.sh.tmpl",
+        "aib_build_builder.sh.tmpl",
+        "aib_build_image.sh.tmpl",
+        "aib_build_disk.sh.tmpl",
     ],
 )

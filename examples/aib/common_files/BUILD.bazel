@@ -10,3 +10,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+
+exports_files([
+    "vars.yml",
+    "vars-devel.yml",
+])
+
+package(default_visibility = ["//visibility:public"])

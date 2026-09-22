@@ -1,6 +1,5 @@
-#!/bin/bash
 # *******************************************************************************
-# Copyright (c) 2026 Contributors to the Eclipse Foundation
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -11,19 +10,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-set -e
 
-export STORAGE_DIR=$(mktemp -d "$PWD/.container-storage-XXX")
-export TMPDIR=$(mktemp -d "$PWD/.tmp-XXX")
-export AIB_TMPDIR_BASE=$TMPDIR
+load("@os_autosd//toolchain/aib:defs.bzl", "aib_build_builder", "aib_script")
 
-mkdir -p "$TMPDIR" "$STORAGE_DIR"
-cleanup() {
-    rm -rf "$TMPDIR"
-    podman unshare rm -rf "$STORAGE_DIR"
-}
-trap cleanup EXIT
+aib_script(
+    name = "aib_build_script",
+)
 
-"$3" build-builder \
-    --user-container --container-storage "$STORAGE_DIR" --distro "$2" \
-    --if-needed --oci-archive "$1"
+aib_build_builder(
+    name = "builder",
+    aib_script = ":aib_build_script",
+    arch = "x86_64",
+    distro = "autosd10",
+)
+
+package(default_visibility = ["//visibility:public"])
