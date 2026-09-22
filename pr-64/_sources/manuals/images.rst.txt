@@ -198,7 +198,7 @@ aib_build_builder
    )
 
 
-This rulle will create an OCI archive (container image) that is used to generate a disk image (.qcow2, .img, etc).
+This rule will create an OCI archive (container image) that is used to generate a disk image (.qcow2, .img, etc).
 
 .. csv-table:: 
    :header: "field", "Required", "Default Value", "Description"
