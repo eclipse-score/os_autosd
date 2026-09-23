@@ -1,0 +1,2211 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CPP Toolchain Flags &#8212; CentOS AutoSD 10 Development Target  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/score.css?v=bb63a8e1" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/score_needs.css?v=82a1844f" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/score_design.css?v=8048e6ee" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=803738c0" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+
+    <script src="../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+    <script src="../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+    <script src="../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+    <script src="../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+    <script src="../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'manuals/cpp_toolchain_flags';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.17.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://eclipse-score.github.io/os_autosd/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RPM Toolchain" href="rpm_toolchain.html" />
+    <link rel="prev" title="CPP Toolchain" href="cpp_toolchain.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.2" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Eclipse S-CORE</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Manuals
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../release/index.html">
+    Releases
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/eclipse-score" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Manuals
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../release/index.html">
+    Releases
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/eclipse-score" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cpp_toolchain.html">CPP Toolchain</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CPP Toolchain Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rpm_toolchain.html">RPM Toolchain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rust_toolchain.html">Rust Toolchain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="images.html">Images</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Manuals</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">CPP Toolchain Flags</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="cpp-toolchain-flags">
+<h1>CPP Toolchain Flags<a class="headerlink" href="#cpp-toolchain-flags" title="Link to this heading">#</a></h1>
+<section id="warnings-as-errors">
+<h2>Warnings as Errors<a class="headerlink" href="#warnings-as-errors" title="Link to this heading">#</a></h2>
+<p>The following table lists all warnings that will throw an error by default.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flags</p></th>
+<th class="head"><p>Status / Default Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>–all-warnings</p></td>
+<td><p>-Wall</p></td>
+</tr>
+<tr class="row-odd"><td><p>–extra-warnings</p></td>
+<td><p>-Wextra</p></td>
+</tr>
+<tr class="row-even"><td><p>-W</p></td>
+<td><p>-Wextra</p></td>
+</tr>
+<tr class="row-odd"><td><p>-WNSObject-attribute</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wabbreviated-auto-in-template-arg</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wabi</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wabi-tag</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wabi=</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wabsolute-value</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Waddress</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Waddress-of-packed-member</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Waggregate-return</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Waggressive-loop-optimizations</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Waliasing</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Walign-commons</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Waligned-new=[none|global|all]</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wall</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Walloc-size</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Walloc-size-larger-than=&lt;bytes&gt;</p></td>
+<td><p>9223372036854775807 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Walloc-zero</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Walloca</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Walloca-larger-than=&lt;number&gt;</p></td>
+<td><p>9223372036854775807 bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wampersand</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-allocation-size</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-deref-before-check</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-double-fclose</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-double-free</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-exposure-through-output-file</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-exposure-through-uninit-copy</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-fd-access-mode-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-fd-double-close</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-fd-leak</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-fd-phase-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-fd-type-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-fd-use-after-close</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-fd-use-without-check</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-file-leak</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-free-of-non-heap</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-imprecise-fp-arithmetic</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-infinite-loop</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-infinite-recursion</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-jump-through-null</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-malloc-leak</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-mismatching-deallocation</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-null-argument</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-null-dereference</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-out-of-bounds</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-overlapping-buffers</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-possible-null-argument</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-possible-null-dereference</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-putenv-of-auto-var</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-shift-count-negative</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-shift-count-overflow</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-stale-setjmp-buffer</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-symbol-too-complex</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-tainted-allocation-size</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-tainted-array-index</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-tainted-assertion</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-tainted-divisor</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-tainted-offset</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-tainted-size</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-throw-of-unexpected-type</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-too-complex</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-undefined-behavior-ptrdiff</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-undefined-behavior-strtok</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-unsafe-call-within-signal-handler</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-use-after-free</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-use-of-pointer-in-stale-stack-frame</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-use-of-uninitialized-value</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-va-arg-type-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-va-list-exhausted</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-va-list-leak</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-va-list-use-after-va-end</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wanalyzer-write-to-const</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wanalyzer-write-to-string-literal</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wany-length</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wapply-commit</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Warith-conversion</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Warray-bounds</p></td>
+<td><p>-Warray-bounds=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Warray-bounds=&lt;0,2&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Warray-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Warray-parameter</p></td>
+<td><p>-Warray-parameter=2</p></td>
+</tr>
+<tr class="row-even"><td><p>-Warray-parameter=&lt;0,2&gt;</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Warray-temporaries</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wassign-intercept</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wattribute-alias</p></td>
+<td><p>-Wattribute-alias=1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wattribute-alias=&lt;0,2&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wattribute-warning</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wattributes</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wauto-profile</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wbad-function-cast</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wbad-line-directive</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wbad-numeric</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wbidi-chars</p></td>
+<td><p>-Wbidi-chars=any</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wbidi-chars=</p></td>
+<td><p>unpaired</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wbinary-long-long</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wbool-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wbool-operation</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wbuiltin-declaration-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wbuiltin-macro-redefined</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++-compat</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc++0x-compat</p></td>
+<td><p>-Wc++11-compat</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++11-compat</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc++11-extensions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++14-compat</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc++14-extensions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++17-compat</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc++17-extensions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++1z-compat</p></td>
+<td><p>-Wc++17-compat</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc++20-compat</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++20-extensions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc++23-extensions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++26-compat</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc++26-extensions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc++2a-compat</p></td>
+<td><p>-Wc++20-compat</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc-binding-type</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wc11-c23-compat</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc23-c2y-compat</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wc90-c99-compat</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wc99-c11-compat</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wcall-giving</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcall-literal</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcalloc-transposed-args</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcannot-profile</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcast-align</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcast-align=strict</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcast-function-type</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcast-qual</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcast-result</p></td>
+<td><p>[available in D]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcast-user-defined</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcatch-value</p></td>
+<td><p>-Wcatch-value=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcatch-value=&lt;0,3&gt;</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcdf-dollar</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcdf-invalid-parameter</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcdf-name-not-found</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wchanges-meaning</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wchar-subscripts</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcharacter-truncation</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wchkp</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wclass-conversion</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wclass-memaccess</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wclobbered</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcobol-eject</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcobol-resume</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcobol-volatile</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcomma-subscript</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcomment</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcomments</p></td>
+<td><p>-Wcomment</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcomp-6</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcomp-x</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcompare-distinct-pointer-types</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcompare-reals</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcomplain-wrong-lang</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wconditionally-supported</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wconversion</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wconversion-extra</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wconversion-null</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcopybook-found</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcoverage-invalid-line-number</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcoverage-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcoverage-too-many-conditions</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wcoverage-too-many-paths</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wcpp</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wctad-maybe-unsupported</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wctor-dtor-privacy</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdangling-else</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdangling-pointer</p></td>
+<td><p>-Wdangling-pointer=2</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdangling-pointer=&lt;0,2&gt;</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdangling-reference</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdate-time</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdeclaration-after-statement</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdeclaration-missing-parameter-type</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdefaulted-function-deleted</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdelete-incomplete</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdelete-non-virtual-dtor</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdeprecated</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdeprecated-copy</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdeprecated-copy-dtor</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdeprecated-declarations</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdeprecated-enum-enum-conversion</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdeprecated-enum-float-conversion</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdeprecated-literal-operator</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdeprecated-non-prototype</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdeprecated-openmp</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdeprecated-variadic-comma-omission</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdesignated-init</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdisabled-optimization</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdiscarded-array-qualifiers</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdiscarded-qualifiers</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdiv-by-zero</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wdo-subscript</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wdouble-promotion</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wduplicate-decl-specifier</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wduplicated-branches</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wduplicated-cond</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wec-unknown</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Weffc++</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Welaborated-enum-base</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wempty-body</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wendif-labels</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wentry-convention</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wenum-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wenum-conversion</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wenum-int-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wequal-assign</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Werror-implicit-function-declaration</p></td>
+<td><p>-Werror=implicit-function-declaration</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wexceptions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wexpansion-to-defined</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wexpose-global-module-tu-local</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wextensions</p></td>
+<td><p>[available in Algol68]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wexternal-argument-mismatch</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wexternal-tu-local</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wextra</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wextra-semi</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wfile-code-set</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wflex-array-member-not-at-end</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wfloat-conversion</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wfloat-equal</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wformat</p></td>
+<td><p>-Wformat=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wformat-contains-nul</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wformat-diag</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wformat-extra-args</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wformat-nonliteral</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wformat-overflow&lt;0,2&gt;</p></td>
+<td><p>-Wformat-overflow=1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wformat-overflow=&lt;0,2&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wformat-security</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wformat-signedness</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wformat-truncation</p></td>
+<td><p>-Wformat-truncation=1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wformat-truncation=&lt;0,2&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wformat-y2k</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wformat-zero-length</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wformat=&lt;0,2&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wframe-address</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wframe-larger-than=&lt;byte-size&gt;</p></td>
+<td><p>9223372036854775807 bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wfree-labels</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wfree-nonheap-object</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wfunction-elimination</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wglobal-module</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Whardened</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wheader-guard</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Whidden-declarations=</p></td>
+<td><p>[available in Algol68]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Whigh-order-bit</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Whsa</p></td>
+<td><p>[ignored]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wiconv-error</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wif-not-aligned</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wignored-attributes</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wignored-qualifiers</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wimplicit</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wimplicit-fallthrough</p></td>
+<td><p>-Wimplicit-fallthrough=3</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wimplicit-fallthrough=&lt;0,5&gt;</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wimplicit-function-declaration</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wimplicit-int</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wimplicit-interface</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wimplicit-procedure</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winaccessible-base</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winclude-file-found</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winclude-file-not-found</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wincompatible-pointer-types</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winfinite-recursion</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winherited-variadic-ctor</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winit-list-lifetime</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winit-self</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winline</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winspect-trailing</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wint-conversion</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wint-in-bool-context</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wint-to-pointer-cast</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winteger-division</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winterference-size</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wintrinsic-shadow</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wintrinsics-std</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winvalid-constexpr</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winvalid-imported-macros</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winvalid-memory-model</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winvalid-offsetof</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Winvalid-pch</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Winvalid-utf8</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wjump-misses-init</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wkeyword-macro</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wlarger-than-</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wlarger-than=&lt;byte-size&gt;</p></td>
+<td><p>9223372036854775807 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wleading-whitespace=</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wlength-of</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wlevel-1-occurs</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wlevel-78</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wlevel-78-defined</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wline-truncation</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wliteral-concat</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wliteral-suffix</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wlocale-error</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wlogical-not-parentheses</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wlogical-op</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wlong-long</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wlto-type-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmain</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmaybe-musttail-local-addr</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmaybe-uninitialized</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmemset-elt-size</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmemset-transposed-args</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmisleading-indentation</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmismatched-dealloc</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmismatched-new-delete</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmismatched-special-enum</p></td>
+<td><p>[available in D]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmismatched-tags</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmissing-attributes</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmissing-braces</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmissing-declarations</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmissing-field-initializers</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmissing-format-attribute</p></td>
+<td><p>-Wsuggest-attribute=format</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmissing-include-dirs</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmissing-noreturn</p></td>
+<td><p>-Wsuggest-attribute=noreturn</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmissing-parameter-name</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wmissing-parameter-type</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmissing-profile</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmissing-prototypes</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmissing-requires</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmissing-template-keyword</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmissing-variable-declarations</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmove-corresponding</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmove-index</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmove-pointer</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmultichar</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmultiple-inheritance</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmultiple-parameter-fwd-decl-lists</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wmultistatement-macros</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wmusttail-local-addr</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wnamespaces</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wnarrowing</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wnested-externs</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wnllanginfo-error</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wno-alloc-size-larger-than</p></td>
+<td><p>-Walloc-size-larger-than=18446744073709551615EiB</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wno-alloca-larger-than</p></td>
+<td><p>-Walloca-larger-than=18446744073709551615EiB</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wno-frame-larger-than</p></td>
+<td><p>-Wframe-larger-than=18446744073709551615EiB</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wno-larger-than</p></td>
+<td><p>-Wlarger-than=18446744073709551615EiB</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wno-stack-usage</p></td>
+<td><p>-Wstack-usage=18446744073709551615EiB</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wno-vla-larger-than</p></td>
+<td><p>-Wvla-larger-than=18446744073709551615EiB</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wnoexcept</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wnoexcept-type</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wnon-c-typedef-for-linkage</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wnon-template-friend</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wnon-virtual-dtor</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wnonnull</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wnonnull-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wnormalized</p></td>
+<td><p>-Wnormalized=nfc</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wnormalized=[none|id|nfc|nfkc]</p></td>
+<td><p>nfc</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wnrvo</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wnull-dereference</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wobjc-root-class</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wodr</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wold-style-cast</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wold-style-declaration</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wold-style-definition</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wopenacc-parallelism</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wopenmp</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wopenmp-simd</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Woperator-space</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Woverflow</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Woverlength-strings</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Woverloaded-virtual</p></td>
+<td><p>-Woverloaded-virtual=2</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Woverloaded-virtual=&lt;0,2&gt;</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Woverride-init</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Woverride-init-side-effects</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Woverwrite-recursive</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpacked</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpacked-bitfield-compat</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpacked-not-aligned</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpadded</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wparentheses</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpedantic</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpedantic-cast</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpedantic-param-names</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpessimizing-move</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wplacement-new</p></td>
+<td><p>-Wplacement-new=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wplacement-new=&lt;0,2&gt;</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpmf-conversions</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpointer-arith</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpointer-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpointer-sign</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpointer-to-int-cast</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpragma-once-outside-header</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wpragmas</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpreprocessor-error</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wprio-ctor-dtor</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wprocedure-not-found</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wprocedure-pointer</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wproperty-assign-default</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wprotocol</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wpsabi</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wrange-loop-construct</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wreal-q-constant</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wrealloc-lhs</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wrealloc-lhs-all</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wrecording-mode</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wredundant-decls</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wredundant-move</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wredundant-tags</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wregister</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wreorder</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wreplace-error</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wrestrict</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wreturn-local-addr</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wreturn-mismatch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wreturn-type</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wreturning-number</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wscalar-storage-order</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wscope</p></td>
+<td><p>[available in Algol68]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsegment</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsegment-error</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsegment-negative</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wselector</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wself-move</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsequence-point</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wset-locale-to</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wset-to-locale</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsfinae-incomplete</p></td>
+<td><p>-Wsfinae-incomplete=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsfinae-incomplete=&lt;0,2&gt;</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wshadow</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wshadow-compatible-local</p></td>
+<td><p>-Wshadow=compatible-local</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wshadow-ivar</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wshadow-local</p></td>
+<td><p>-Wshadow=local</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wshadow=compatible-local</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wshadow=global</p></td>
+<td><p>-Wshadow</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wshadow=local</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wshift-count-negative</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wshift-count-overflow</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wshift-negative-value</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wshift-overflow</p></td>
+<td><p>-Wshift-overflow=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wshift-overflow=&lt;0,2&gt;</p></td>
+<td><p>-1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsign-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsign-conversion</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsign-promo</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsized-deallocation</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsizeof-array-argument</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsizeof-array-div</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsizeof-pointer-div</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsizeof-pointer-memaccess</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstack-protector</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstack-usage=&lt;byte-size&gt;</p></td>
+<td><p>9223372036854775807 bytes</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstop-number</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstray-indicator</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstrict-aliasing</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstrict-aliasing=&lt;0,3&gt;</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstrict-flex-arrays</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstrict-null-sentinel</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstrict-overflow</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstrict-overflow=&lt;0,5&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstrict-prototypes</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstrict-selector-match</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstring-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstringop-overflow</p></td>
+<td><p>-Wstringop-overflow=2</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstringop-overflow=&lt;0,4&gt;</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstringop-overread</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wstringop-truncation</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wstyle</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsubobject-linkage</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsuggest-attribute=cold</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsuggest-attribute=const</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsuggest-attribute=format</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsuggest-attribute=malloc</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsuggest-attribute=noreturn</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsuggest-attribute=pure</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsuggest-attribute=returns_nonnull</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsuggest-final-methods</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsuggest-final-types</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsuggest-override</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsurprising</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wswitch</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wswitch-bool</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wswitch-default</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wswitch-enum</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wswitch-outside-range</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wswitch-unreachable</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsync-nand</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wsynth</p></td>
+<td><p>[ignored]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wsystem-headers</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtabs</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wtarget-lifetime</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtautological-compare</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wtemplate-body</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtemplate-id-cdtor</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wtemplate-names-tu-local</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtemplates</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wterminate</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtraditional</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wtraditional-conversion</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtrailing-whitespace</p></td>
+<td><p>-Wtrailing-whitespace=blanks</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wtrailing-whitespace=</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtrampolines</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wtrigraphs</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtrivial-auto-var-init</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wtsan</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wtype-limits</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wundeclared-selector</p></td>
+<td><p>[available in ObjC, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wundef</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wundefined-do-loop</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunderflow</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunicode</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wuninit-variable-checking</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wuninit-variable-checking=</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>-Wuninitialized</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunknown-pragmas</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunreachable-code</p></td>
+<td><p>[ignored]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunsafe-loop-optimizations</p></td>
+<td><p>[ignored]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunsuffixed-float-constants</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunterminated-string-initialization</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-but-set-parameter</p></td>
+<td><p>-Wunused-but-set-parameter=3</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused-but-set-parameter=&lt;0,3&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-but-set-variable</p></td>
+<td><p>-Wunused-but-set-variable=3</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused-but-set-variable=&lt;0,3&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-const-variable</p></td>
+<td><p>-Wunused-const-variable=2</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused-const-variable=&lt;0,2&gt;</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-dummy-argument</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused-function</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-label</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused-local-typedefs</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-macros</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused-parameter</p></td>
+<td><p>[available in Modula-2]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-result</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wunused-value</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wunused-variable</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wusage-typename</p></td>
+<td><p>[available in Cobol]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wuse-after-free</p></td>
+<td><p>-Wuse-after-free=1</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wuse-after-free=&lt;0,3&gt;</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wuse-without-only</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wuseless-cast</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wvarargs</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wvariadic-macros</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wvector-operation-performance</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wverbose-unbounded</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wvexing-parse</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wvirtual-inheritance</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wvirtual-move-assign</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wvla</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>-Wvla-larger-than=&lt;number&gt;</p></td>
+<td><p>9223372036854775807 bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wvla-parameter</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wvoiding</p></td>
+<td><p>[available in Algol68]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wvolatile</p></td>
+<td><p>[available in C++, ObjC++]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wvolatile-register-var</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wwrite-strings</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wxor-used-as-pow</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wzero-as-null-pointer-constant</p></td>
+<td><p>[disabled]</p></td>
+</tr>
+<tr class="row-even"><td><p>-Wzero-length-bounds</p></td>
+<td><p>[enabled]</p></td>
+</tr>
+<tr class="row-odd"><td><p>-Wzerotrip</p></td>
+<td><p>[available in Fortran]</p></td>
+</tr>
+<tr class="row-even"><td><p>-frequire-return-statement</p></td>
+<td><p>[available in Go]</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cpp_toolchain.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CPP Toolchain</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="rpm_toolchain.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">RPM Toolchain</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#warnings-as-errors">Warnings as Errors</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/eclipse-score/os_autosd/edit/main/docs/manuals/cpp_toolchain_flags.rst">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/manuals/cpp_toolchain_flags.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
