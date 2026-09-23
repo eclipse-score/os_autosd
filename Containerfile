@@ -23,6 +23,7 @@ RUN dnf install -y \
     git \
     java-21-openjdk \
     gcc \
+    gcc-c++ \
     vim \
     && dnf clean all
 
