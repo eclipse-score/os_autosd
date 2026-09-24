@@ -41,6 +41,13 @@ On a ARM64 machine you may need to specify the platform and make sure you are em
 podman build --platform linux/amd64 -t localhost/bazel:8.3.0 .
 ```
 
+If you wish to build a specific Bazel version (other than 8.3.0) you can build you container using (for example for bazel 8.6.0):
+
+```
+podman build --build-arg BAZEL_VERSION=8.6.0 -t localhost/bazel:8.6.0 .
+```
+You will need to adjust accordingly your podman run command (below) to start the container image `localhost/bazel:8.6.0`.
+
 
 You can then start the container by running:
 
