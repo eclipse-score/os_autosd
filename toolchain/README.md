@@ -34,6 +34,8 @@ autosd_10_gcc.configure(
     c_flags = ["-Wall", "-Wno-error=deprecated-declarations", "-Werror", "-fPIC"],
     cxx_flags = ["-Wall", "-Wno-error=deprecated-declarations", "-Werror", "-fPIC"],
 )
+autosd_10_gcc.autosd_dep(name = "openssl-devel")
+autosd_10_gcc.autosd_dep(name = "zlib-devel")
 
 use_repo(autosd_10_gcc, "autosd_10_gcc_repo")
 register_toolchains("@autosd_10_gcc_repo//:gcc_toolchain_linux_x86_64")
@@ -60,3 +62,7 @@ The `configure` tag accepts the following attributes:
 - `cxx_flags`: List of C++ compiler flags
 - `link_flags`: List of linker flags
 - `replace`: Boolean (default: false). If true, replaces default flags; if false, appends to defaults
+
+The repeatable `autosd_dep` tag accepts an RPM package `name`. Each named package is downloaded from the
+AutoSD repository and extracted into the toolchain sysroot in addition to the default packages. RPM dependencies
+are not resolved automatically; declare every additional package explicitly.
