@@ -5,8 +5,8 @@ Subject: [PATCH] feat(ephemeral) MODULE.bazel changes
 
 Signed-off-by: odra <lrossett@redhat.com>
 ---
- MODULE.bazel | 34 ++++++++++++----------------------
- 1 file changed, 12 insertions(+), 22 deletions(-)
+ MODULE.bazel | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
 diff --git a/MODULE.bazel b/MODULE.bazel
 index ccaafe88..10dfd40a 100644
@@ -44,7 +44,7 @@ index ccaafe88..10dfd40a 100644
  )
  apt.install(
      name = "ubuntu24_04_sysroot",
-@@ -251,26 +250,18 @@ sysroot_from_lock = use_repo_rule(
+@@ -251,19 +250,17 @@ sysroot_from_lock = use_repo_rule(
  sysroot_from_lock(
      name = "ubuntu24_04_sysroot_amd64",
      architecture = "amd64",
@@ -59,16 +59,9 @@ index ccaafe88..10dfd40a 100644
      lock = "@ubuntu24_04_sysroot_resolve//:lock.json",
  )
  
--# FIXME: remove git_override once score_cpp_policies is released to BCR.
--bazel_dep(name = "score_cpp_policies", version = "0.0.0", dev_dependency = True)
--git_override(
--    module_name = "score_cpp_policies",
--    commit = "cdfd6ac4217b9e7413fa1e959ccb857bf803165f",
--    remote = "https://github.com/eclipse-score/score_cpp_policies.git",
--)
-+bazel_dep(name = "score_cpp_policies", version = "0.1.1")
- 
+-bazel_dep(name = "score_cpp_policies", version = "0.1.1", dev_dependency = True)
 -bazel_dep(name = "toolchains_llvm", version = "1.8.0", dev_dependency = True)
++bazel_dep(name = "score_cpp_policies", version = "0.1.1")
 +bazel_dep(name = "toolchains_llvm", version = "1.8.0")
  
  llvm = use_extension(
@@ -100,7 +93,7 @@ index ccaafe88..10dfd40a 100644
  # Apply patch to fix Doxyfile template for our use cases
  single_version_override(
 @@ -402,7 +392,7 @@ single_version_override(
- bazel_dep(name = "score_docs_as_code", version = "8.1.1", dev_dependency = True)
+ bazel_dep(name = "score_docs_as_code", version = "8.1.2", dev_dependency = True)
  
  # Doxygen extension for documentation generation
 -doxygen_extension = use_extension("@rules_doxygen//:extensions.bzl", "doxygen_extension", dev_dependency = True)
