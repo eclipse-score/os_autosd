@@ -89,7 +89,7 @@ git_override(
     branch = "main",
     patch_strip = 1,
     patches = [
-        "//patches/time:0001-feat-ephemeral-MODULE.bazel-changes.patch",
+        #    "//patches/time:0001-feat-ephemeral-MODULE.bazel-changes.patch",
     ],
     remote = "https://github.com/eclipse-score/inc_time.git",
 )
