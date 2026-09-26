@@ -88,8 +88,6 @@ git_override(
     module_name = "score_time",
     branch = "main",
     patch_strip = 1,
-    patches = [
-        "//patches/time:0001-feat-ephemeral-MODULE.bazel-changes.patch",
-    ],
+    patches = [],
     remote = "https://github.com/eclipse-score/inc_time.git",
 )
