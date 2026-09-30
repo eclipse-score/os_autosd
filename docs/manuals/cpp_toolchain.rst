@@ -141,8 +141,14 @@ MODULE.bazel content:
      c_flags = ["-fPIC"],
      cxx_flags = ["-fPIC"],
    )
+   autosd_10_gcc.autosd_dep(name = "openssl-devel")
+   autosd_10_gcc.autosd_dep(name = "zlib-devel")
 
    use_repo(autosd_10_gcc, "autosd_10_gcc_repo")
+
+The repeatable ``autosd_dep`` tag adds explicitly named RPM packages to the generated sysroot. The toolchain
+downloads and extracts each package from the AutoSD repository. Transitive RPM dependencies are not resolved,
+so each required package must be declared separately.
 
 
 Also add the following to .bazelrc:

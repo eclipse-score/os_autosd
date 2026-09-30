@@ -31,7 +31,7 @@ def _autosd_10_gcc_toolchain_impl(repository_ctx):
     )
 
     # Run setup script with unbuffered output
-    setup_args = ["bash", "-c", "exec ./setup_toolchain.sh '{}'".format(rpm_arch)]
+    setup_args = ["bash", "./setup_toolchain.sh", rpm_arch] + repository_ctx.attr.autosd_deps
 
     result = repository_ctx.execute(setup_args, quiet = False)
     if result.return_code != 0:
@@ -92,6 +92,9 @@ autosd_10_gcc_toolchain = repository_rule(
             doc = "Linker flags for the toolchain",
             default = ["-Wl,-z,relro", "-Wl,-z,now"],
         ),
+        "autosd_deps": attr.string_list(
+            doc = "Additional AutoSD RPM packages to extract into the sysroot",
+        ),
     },
     doc = "Repository rule for AutoSD 10 GCC toolchain",
 )
@@ -113,6 +116,7 @@ def _autosd_10_gcc_extension_impl(module_ctx):
         c_flags = []
         cxx_flags = []
         link_flags = []
+        autosd_deps = []
         replace_mode = False
 
         for config_tag in mod.tags.configure:
@@ -121,6 +125,12 @@ def _autosd_10_gcc_extension_impl(module_ctx):
             c_flags.extend(config_tag.c_flags)
             cxx_flags.extend(config_tag.cxx_flags)
             link_flags.extend(config_tag.link_flags)
+
+        for dependency_tag in mod.tags.autosd_dep:
+            package_name = dependency_tag.name.strip()
+            if not package_name:
+                fail("autosd_dep name must not be empty")
+            autosd_deps.append(package_name)
 
         # If not in replace mode, prepend defaults
         if not replace_mode:
@@ -140,6 +150,7 @@ def _autosd_10_gcc_extension_impl(module_ctx):
             c_flags = c_flags,
             cxx_flags = cxx_flags,
             link_flags = link_flags,
+            autosd_deps = autosd_deps,
         )
 
 _configure_tag = tag_class(
@@ -161,9 +172,20 @@ _configure_tag = tag_class(
     doc = "Configure compiler and linker flags for the AutoSD 10 GCC toolchain",
 )
 
+_autosd_dep_tag = tag_class(
+    attrs = {
+        "name": attr.string(
+            doc = "Name of an additional AutoSD RPM package to extract into the sysroot",
+            mandatory = True,
+        ),
+    },
+    doc = "Add an AutoSD RPM package to the GCC toolchain sysroot",
+)
+
 autosd_10_gcc_extension = module_extension(
     implementation = _autosd_10_gcc_extension_impl,
     tag_classes = {
+        "autosd_dep": _autosd_dep_tag,
         "configure": _configure_tag,
     },
     doc = "Extension for AutoSD 10 GCC toolchain",
