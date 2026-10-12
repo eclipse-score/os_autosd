@@ -35,6 +35,7 @@ elif [ $# -lt 1 ]; then
 fi
 
 ARCH="$1"
+shift
 
 # Setup working directory
 WORK_DIR="$(pwd)"
@@ -99,6 +100,20 @@ PACKAGES=(
     "libatomic"
     "libtsan"
 )
+
+for package in "$@"; do
+    package_is_present=false
+    for configured_package in "${PACKAGES[@]}"; do
+        if [ "$configured_package" = "$package" ]; then
+            package_is_present=true
+            break
+        fi
+    done
+
+    if [ "$package_is_present" = false ]; then
+        PACKAGES+=("$package")
+    fi
+done
 
 USER_AGENT="Multi-GCC-Toolchain/1.0"
 MAX_RETRIES=3
