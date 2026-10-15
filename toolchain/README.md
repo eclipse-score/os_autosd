@@ -15,6 +15,12 @@
 
 This directory contains Bazel toolchain definitions for building with AutoSD GCC compilers.
 
+The direct Bazel module uses the compiler flag definitions from
+`score_bazel_cpp_toolchains` by default. Its flags for `dbg`, `opt`, and `fastbuild`
+are applied according to the selected Bazel compilation mode. AutoSD's sysroot,
+compiler paths, and include directories are configured in every mode.
+AutoSD's linker defaults are retained because its SDK uses a dynamic C++ runtime.
+
 ## Usage
 
 ### In your MODULE.bazel
@@ -56,7 +62,26 @@ build --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
 
 The `configure` tag accepts the following attributes:
 
-- `c_flags`: List of C compiler flags
-- `cxx_flags`: List of C++ compiler flags
-- `link_flags`: List of linker flags
-- `replace`: Boolean (default: false). If true, replaces default flags; if false, appends to defaults
+- `c_flags`: Additional C compiler flags
+- `cxx_flags`: Additional C++ compiler flags
+- `link_flags`: Additional linker flags
+- `use_score_flags`: Boolean (default: true). Inherit S-CORE compiler
+  flags. If any `configure` tag for a module sets this to false, that module's
+  toolchain uses the previous standalone defaults instead.
+- `replace`: Boolean (default: false). Replace standalone compiler defaults and
+  AutoSD linker defaults for each nonempty custom flag list. Empty lists keep
+  their defaults. Inherited S-CORE compiler flags remain active; custom compiler
+  flags are appended after them, regardless of `replace`.
+
+Custom flags appear after inherited flags, so a setting such as
+`cxx_flags = ["-std=c++20"]` can override the inherited language standard.
+
+To disable S-CORE flags in your `MODULE.bazel`:
+
+```starlark
+autosd_10_gcc.configure(use_score_flags = False)
+```
+
+For a custom policy, combine `use_score_flags = False` with `replace = True` and
+provide the desired C, C++, and linker flags. Sysroot and include-path settings
+remain active.

@@ -45,6 +45,8 @@ bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2", dev_dependency = Tr
 bazel_dep(name = "score_docs_as_code", version = "4.6.0")
 
 # AutoSD GCC Toolchains
+bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.5.4")
+
 autosd_10_gcc = use_extension("//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
 use_repo(autosd_10_gcc, "autosd_10_gcc_repo")
 
