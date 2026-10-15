@@ -120,9 +120,18 @@ Then setup **.bazelrc** accordingly:
 Standalone
 **********
 
-The toolchain can also be used as a direct Bazel dependency. Note that it will not use any rules or flags
-defined by **score_bazel_cpp_toolchains** if doing so. The host system also needs the **rpm** tool in order
-to extract all the required software into Bazel's sysroot.
+The toolchain can also be used as a direct Bazel dependency. GCC warning features from
+**score_cpp_policies** are available, with ``minimal_warnings`` enabled by default.
+AutoSD maintains its language, hardening, and reproducibility defaults locally,
+including C11/C++17 and flags selected by Bazel's ``dbg`` (``-Og -g3``), ``opt``, and
+``fastbuild`` (``-O2 -DNDEBUG``) compilation modes. The host system also needs the
+**rpm** tool in order to extract all the required software into Bazel's sysroot.
+AutoSD's linker defaults are retained, since its SDK uses a dynamic C++ runtime.
+
+Enable ``strict_warnings`` or ``all_wall_warnings`` with Bazel's ``--features``
+option to include progressively stricter warning levels. ``warnings_as_errors``
+is a separate opt-in feature. Use ``--features=-minimal_warnings`` to disable the
+baseline warnings while keeping AutoSD's other compiler defaults.
 
 MODULE.bazel content:
 
@@ -143,6 +152,21 @@ MODULE.bazel content:
    )
 
    use_repo(autosd_10_gcc, "autosd_10_gcc_repo")
+
+Custom ``c_flags`` and ``cxx_flags`` are appended after the warning policy and AutoSD
+compiler defaults. For example, ``cxx_flags = ["-std=c++20"]`` overrides the default
+C++ language standard.
+
+To use the previous standalone defaults and disable the S-CORE warning features:
+
+.. code-block:: starlark
+
+   autosd_10_gcc.configure(use_score_flags = False)
+
+``replace = True`` replaces standalone compiler defaults and AutoSD linker defaults for each
+nonempty custom flag list; empty lists retain their defaults. With inheritance enabled,
+``replace`` does not disable policy warnings or AutoSD compiler defaults. AutoSD's sysroot
+and required include and library paths remain configured in both modes.
 
 
 Also add the following to .bazelrc:
