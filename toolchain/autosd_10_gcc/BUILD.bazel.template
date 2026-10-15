@@ -91,6 +91,7 @@ cc_toolchain_config(
     c_flags = [{C_FLAGS}],
     cxx_flags = [{CXX_FLAGS}],
     link_flags = [{LINK_FLAGS}],
+    use_score_flags = {USE_SCORE_FLAGS},
 )
 
 # The actual toolchain

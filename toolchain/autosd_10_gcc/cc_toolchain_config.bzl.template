@@ -10,9 +10,98 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-load("@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl",
-     "feature", "flag_group", "flag_set", "tool_path", "with_feature_set")
+"""AutoSD GCC toolchain configuration with shared compiler policy."""
+
 load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
+load(
+    "@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl",
+    "feature",
+    "flag_group",
+    "flag_set",
+    "tool_path",
+    "with_feature_set",
+)
+load(
+    ":score_flags.bzl",
+    "DBG_COMPILE_FLAGS",
+    "DEFAULT_ARM64_COMPILE_FLAGS",
+    "DEFAULT_COMPILE_FLAGS",
+    "DEFAULT_CXX_COMPILE_FLAGS",
+    "DEFAULT_C_COMPILE_FLAGS",
+    "DEFAULT_x86_64_COMPILE_FLAGS",
+    "OPT_COMPILE_FLAGS",
+    "UNFILTERED_COMPILE_FLAGS",
+    "get_flag_group",
+)
+
+_C_COMPILE_ACTIONS = [ACTION_NAMES.c_compile]
+_CXX_COMPILE_ACTIONS = [
+    ACTION_NAMES.cpp_compile,
+    ACTION_NAMES.linkstamp_compile,
+    ACTION_NAMES.cpp_header_parsing,
+    ACTION_NAMES.cpp_module_compile,
+    ACTION_NAMES.cpp_module_codegen,
+    ACTION_NAMES.clif_match,
+    ACTION_NAMES.lto_backend,
+]
+_COMPILE_ACTIONS = _C_COMPILE_ACTIONS + _CXX_COMPILE_ACTIONS + [
+    ACTION_NAMES.assemble,
+    ACTION_NAMES.preprocess_assemble,
+]
+_LINK_ACTIONS = [
+    ACTION_NAMES.cpp_link_executable,
+    ACTION_NAMES.cpp_link_dynamic_library,
+    ACTION_NAMES.cpp_link_nodeps_dynamic_library,
+]
+
+def _score_features(target_arch):
+    """Apply the upstream Linux GCC flag groups in their compilation modes."""
+    cpu_flags = DEFAULT_x86_64_COMPILE_FLAGS if target_arch == "x86_64" else DEFAULT_ARM64_COMPILE_FLAGS
+    return [
+        feature(name = "dbg"),
+        feature(name = "opt"),
+        feature(name = "fastbuild"),
+        feature(name = "gnu11"),
+        feature(
+            name = "unfiltered_compile_flags",
+            enabled = True,
+            flag_sets = [flag_set(
+                actions = _C_COMPILE_ACTIONS + _CXX_COMPILE_ACTIONS,
+                flag_groups = UNFILTERED_COMPILE_FLAGS,
+            )],
+        ),
+        feature(
+            name = "score_compile_flags",
+            enabled = True,
+            flag_sets = [
+                flag_set(actions = _COMPILE_ACTIONS, flag_groups = DEFAULT_COMPILE_FLAGS + cpu_flags),
+                flag_set(
+                    actions = _C_COMPILE_ACTIONS,
+                    flag_groups = DEFAULT_C_COMPILE_FLAGS + get_flag_group(["-std=c11"]),
+                    with_features = [with_feature_set(not_features = ["gnu11"])],
+                ),
+                flag_set(
+                    actions = _C_COMPILE_ACTIONS,
+                    flag_groups = DEFAULT_C_COMPILE_FLAGS + get_flag_group(["-std=gnu11"]),
+                    with_features = [with_feature_set(features = ["gnu11"])],
+                ),
+                flag_set(actions = _CXX_COMPILE_ACTIONS, flag_groups = DEFAULT_CXX_COMPILE_FLAGS),
+                flag_set(
+                    actions = _COMPILE_ACTIONS,
+                    flag_groups = DBG_COMPILE_FLAGS,
+                    with_features = [with_feature_set(features = ["dbg"])],
+                ),
+                flag_set(
+                    actions = _COMPILE_ACTIONS,
+                    flag_groups = OPT_COMPILE_FLAGS,
+                    with_features = [
+                        with_feature_set(features = ["opt"]),
+                        with_feature_set(features = ["fastbuild"]),
+                    ],
+                ),
+            ],
+        ),
+    ]
 
 def _impl(ctx):
     tool_paths = [
@@ -27,6 +116,15 @@ def _impl(ctx):
         tool_path(name = "objdump", path = "usr/bin/objdump"),
         tool_path(name = "strip", path = "usr/bin/strip"),
     ]
+    standalone_compile_flags = [] if ctx.attr.use_score_flags else [
+        "-Wall",
+        "-Wextra",
+        "-Wno-builtin-macro-redefined",
+        "-D__DATE__=redacted",
+        "-D__TIMESTAMP__=redacted",
+        "-D__TIME__=redacted",
+    ]
+
     # Compiler flags
     default_compile_flags = feature(
         name = "default_compile_flags",
@@ -40,15 +138,11 @@ def _impl(ctx):
                             "-B" + "external/{REPO_NAME}/usr/bin",
                             "--sysroot=" + "external/{REPO_NAME}",
                             "-nostdinc",
-                            "-isystem", "external/{REPO_NAME}/usr/lib/gcc/" + ctx.attr.target_arch + "-redhat-linux/" + ctx.attr.gcc_version.split('.')[0] + "/include",
-                            "-isystem", "external/{REPO_NAME}/usr/include",
-                            "-Wall",
-                            "-Wextra",
-                            "-Wno-builtin-macro-redefined",
-                            "-D__DATE__=redacted",
-                            "-D__TIMESTAMP__=redacted",
-                            "-D__TIME__=redacted",
-                        ] + ctx.attr.c_flags,
+                            "-isystem",
+                            "external/{REPO_NAME}/usr/lib/gcc/" + ctx.attr.target_arch + "-redhat-linux/" + ctx.attr.gcc_version.split(".")[0] + "/include",
+                            "-isystem",
+                            "external/{REPO_NAME}/usr/include",
+                        ] + standalone_compile_flags,
                     ),
                 ],
             ),
@@ -60,19 +154,18 @@ def _impl(ctx):
                             "-B" + "external/{REPO_NAME}/usr/bin",
                             "--sysroot=" + "external/{REPO_NAME}",
                             "-nostdinc++",
-                            "-isystem", "external/{REPO_NAME}/usr/include/c++/" + ctx.attr.gcc_version.split('.')[0],
-                            "-isystem", "external/{REPO_NAME}/usr/include/c++/" + ctx.attr.gcc_version.split('.')[0] + "/" + ctx.attr.target_arch + "-redhat-linux",
-                            "-isystem", "external/{REPO_NAME}/usr/include/c++/" + ctx.attr.gcc_version.split('.')[0] + "/backward",
+                            "-isystem",
+                            "external/{REPO_NAME}/usr/include/c++/" + ctx.attr.gcc_version.split(".")[0],
+                            "-isystem",
+                            "external/{REPO_NAME}/usr/include/c++/" + ctx.attr.gcc_version.split(".")[0] + "/" + ctx.attr.target_arch + "-redhat-linux",
+                            "-isystem",
+                            "external/{REPO_NAME}/usr/include/c++/" + ctx.attr.gcc_version.split(".")[0] + "/backward",
                             "-nostdinc",
-                            "-isystem", "external/{REPO_NAME}/usr/lib/gcc/" + ctx.attr.target_arch + "-redhat-linux/" + ctx.attr.gcc_version.split('.')[0] + "/include",
-                            "-isystem", "external/{REPO_NAME}/usr/include",
-                            "-Wall",
-                            "-Wextra",
-                            "-Wno-builtin-macro-redefined",
-                            "-D__DATE__=redacted",
-                            "-D__TIMESTAMP__=redacted",
-                            "-D__TIME__=redacted",
-                        ] + ctx.attr.cxx_flags,
+                            "-isystem",
+                            "external/{REPO_NAME}/usr/lib/gcc/" + ctx.attr.target_arch + "-redhat-linux/" + ctx.attr.gcc_version.split(".")[0] + "/include",
+                            "-isystem",
+                            "external/{REPO_NAME}/usr/include",
+                        ] + standalone_compile_flags,
                     ),
                 ],
             ),
@@ -84,10 +177,7 @@ def _impl(ctx):
         enabled = True,
         flag_sets = [
             flag_set(
-                actions = [
-                    ACTION_NAMES.cpp_link_executable,
-                    ACTION_NAMES.cpp_link_dynamic_library,
-                ],
+                actions = _LINK_ACTIONS,
                 flag_groups = [
                     flag_group(
                         flags = [
@@ -96,7 +186,7 @@ def _impl(ctx):
                             "-Wl,--sysroot=" + "external/{REPO_NAME}",
                             "-L" + "external/{REPO_NAME}/lib64",
                             "-L" + "external/{REPO_NAME}/lib",
-                            "-L" + "external/{REPO_NAME}/usr/lib/gcc/" + ctx.attr.target_arch + "-redhat-linux/" + ctx.attr.gcc_version.split('.')[0],
+                            "-L" + "external/{REPO_NAME}/usr/lib/gcc/" + ctx.attr.target_arch + "-redhat-linux/" + ctx.attr.gcc_version.split(".")[0],
                             "-L" + "external/{REPO_NAME}/usr/lib64",
                             "-L" + "external/{REPO_NAME}/usr/lib",
                             "-Wl,-rpath-link," + "external/{REPO_NAME}/lib64",
@@ -105,7 +195,7 @@ def _impl(ctx):
                             "-Wl,-rpath-link," + "external/{REPO_NAME}/usr/lib",
                             "-lstdc++",
                             "-lm",
-                        ] + ctx.attr.link_flags,
+                        ],
                     ),
                 ],
             ),
@@ -118,9 +208,24 @@ def _impl(ctx):
         enabled = True,
     )
 
+    # Custom flags follow the inherited policy so later settings can override it.
+    custom_flags = feature(
+        name = "autosd_custom_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(actions = _C_COMPILE_ACTIONS, flag_groups = get_flag_group(ctx.attr.c_flags)),
+            flag_set(actions = _CXX_COMPILE_ACTIONS, flag_groups = get_flag_group(ctx.attr.cxx_flags)),
+            flag_set(actions = _LINK_ACTIONS, flag_groups = get_flag_group(ctx.attr.link_flags)),
+        ],
+    )
+    features = [default_compile_flags, default_link_flags, supports_header_path_normalization]
+    if ctx.attr.use_score_flags:
+        features.extend(_score_features(ctx.attr.target_arch))
+    features.append(custom_flags)
+
     return cc_common.create_cc_toolchain_config_info(
         ctx = ctx,
-        features = [default_compile_flags, default_link_flags, supports_header_path_normalization],
+        features = features,
         cxx_builtin_include_directories = ctx.attr.include_dirs,
         toolchain_identifier = "{DISTRO_NAME}-gcc-{}".format(ctx.attr.gcc_version),
         host_system_name = "local",
@@ -142,6 +247,7 @@ cc_toolchain_config = rule(
         "c_flags": attr.string_list(),
         "cxx_flags": attr.string_list(),
         "link_flags": attr.string_list(),
+        "use_score_flags": attr.bool(default = True),
     },
     provides = [CcToolchainConfigInfo],
 )
