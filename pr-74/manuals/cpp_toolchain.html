@@ -527,11 +527,17 @@ This way the toolchain will inherit whatever flags or rules are defined by that 
 </section>
 <section id="standalone">
 <h3>Standalone<a class="headerlink" href="#standalone" title="Link to this heading">#</a></h3>
-<p>The toolchain can also be used as a direct Bazel dependency. Compiler flags from
-<strong>score_bazel_cpp_toolchains</strong> are inherited by default, including flags selected by Bazel’s
-<code class="docutils literal notranslate"><span class="pre">dbg</span></code>, <code class="docutils literal notranslate"><span class="pre">opt</span></code>, and <code class="docutils literal notranslate"><span class="pre">fastbuild</span></code> compilation modes. The host system also needs the <strong>rpm</strong> tool
-in order to extract all the required software into Bazel’s sysroot.
+<p>The toolchain can also be used as a direct Bazel dependency. GCC warning features from
+<strong>score_cpp_policies</strong> are available, with <code class="docutils literal notranslate"><span class="pre">minimal_warnings</span></code> enabled by default.
+AutoSD maintains its language, hardening, and reproducibility defaults locally,
+including C11/C++17 and flags selected by Bazel’s <code class="docutils literal notranslate"><span class="pre">dbg</span></code> (<code class="docutils literal notranslate"><span class="pre">-Og</span> <span class="pre">-g3</span></code>), <code class="docutils literal notranslate"><span class="pre">opt</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">fastbuild</span></code> (<code class="docutils literal notranslate"><span class="pre">-O2</span> <span class="pre">-DNDEBUG</span></code>) compilation modes. The host system also needs the
+<strong>rpm</strong> tool in order to extract all the required software into Bazel’s sysroot.
 AutoSD’s linker defaults are retained, since its SDK uses a dynamic C++ runtime.</p>
+<p>Enable <code class="docutils literal notranslate"><span class="pre">strict_warnings</span></code> or <code class="docutils literal notranslate"><span class="pre">all_wall_warnings</span></code> with Bazel’s <code class="docutils literal notranslate"><span class="pre">--features</span></code>
+option to include progressively stricter warning levels. <code class="docutils literal notranslate"><span class="pre">warnings_as_errors</span></code>
+is a separate opt-in feature. Use <code class="docutils literal notranslate"><span class="pre">--features=-minimal_warnings</span></code> to disable the
+baseline warnings while keeping AutoSD’s other compiler defaults.</p>
 <p>MODULE.bazel content:</p>
 <div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">bazel_dep</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;os_autosd&quot;</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span>
 
@@ -550,16 +556,17 @@ AutoSD’s linker defaults are retained, since its SDK uses a dynamic C++ runtim
 <span class="n">use_repo</span><span class="p">(</span><span class="n">autosd_10_gcc</span><span class="p">,</span> <span class="s2">&quot;autosd_10_gcc_repo&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Custom <code class="docutils literal notranslate"><span class="pre">c_flags</span></code> and <code class="docutils literal notranslate"><span class="pre">cxx_flags</span></code> are appended after the inherited compiler policy.
-For example, <code class="docutils literal notranslate"><span class="pre">cxx_flags</span> <span class="pre">=</span> <span class="pre">[&quot;-std=c++20&quot;]</span></code> overrides the inherited C++ language standard.</p>
-<p>To use the previous standalone defaults instead of the S-CORE policy:</p>
+<p>Custom <code class="docutils literal notranslate"><span class="pre">c_flags</span></code> and <code class="docutils literal notranslate"><span class="pre">cxx_flags</span></code> are appended after the warning policy and AutoSD
+compiler defaults. For example, <code class="docutils literal notranslate"><span class="pre">cxx_flags</span> <span class="pre">=</span> <span class="pre">[&quot;-std=c++20&quot;]</span></code> overrides the default
+C++ language standard.</p>
+<p>To use the previous standalone defaults and disable the S-CORE warning features:</p>
 <div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">autosd_10_gcc</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">use_score_flags</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">replace</span> <span class="pre">=</span> <span class="pre">True</span></code> replaces standalone compiler defaults and AutoSD linker defaults for each
 nonempty custom flag list; empty lists retain their defaults. With inheritance enabled,
-<code class="docutils literal notranslate"><span class="pre">replace</span></code> does not disable the shared compiler policy. AutoSD’s sysroot and required
-include and library paths remain configured in both modes.</p>
+<code class="docutils literal notranslate"><span class="pre">replace</span></code> does not disable policy warnings or AutoSD compiler defaults. AutoSD’s sysroot
+and required include and library paths remain configured in both modes.</p>
 <p>Also add the following to .bazelrc:</p>
 <div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="na">build</span><span class="o">:</span><span class="s">autosd-x86_64 --extra_toolchains=@autosd_10_gcc_repo//:gcc_toolchain_linux_x86_64</span>
 </pre></div>
