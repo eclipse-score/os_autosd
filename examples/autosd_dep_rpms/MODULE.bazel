@@ -1,0 +1,64 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+module(
+    name = "autosd_rpm_example",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "os_autosd", version = "0.0.0")
+local_path_override(
+    module_name = "os_autosd",
+    path = "../../",
+)
+
+bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "platforms", version = "0.0.11")
+
+autosd_rpm = use_repo_rule("@os_autosd//rules/autosd_dep:defs.bzl", "autosd_rpm")
+
+autosd_rpm(
+    name = "zlib-rpm",
+    arch = "x86_64",
+    build = "//third_party/zlib:zlib.BUILD",
+    packages = [
+        "zlib-ng-compat",  # provides usr/lib64/libz.so.1
+        "zlib-ng-compat-devel",  # provides usr/include/zlib.h
+    ],
+    visibility = ["//visibility:public"],
+)
+
+bazel_dep(name = "score_bazel_platforms", version = "1.1.0")
+
+bazel_dep(name = "score_cpp_policies", version = "0.1.2", dev_dependency = True)
+bazel_dep(name = "score_bazel_cpp_toolchains", version = "1.0.4", dev_dependency = True)
+
+gcc = use_extension("@score_bazel_cpp_toolchains//extensions:gcc.bzl", "gcc", dev_dependency = True)
+gcc.toolchain(
+    name = "score_autosd10_x86_64_toolchain",
+    runtime_ecosystem = "autosd10",
+    target_cpu = "x86_64",
+    target_os = "linux",
+    use_default_package = True,
+)
+gcc.toolchain(
+    name = "score_gcc_toolchain_15",
+    target_cpu = "x86_64",
+    target_os = "linux",
+    use_default_package = True,
+    version = "15.3.0",
+)
+use_repo(
+    gcc,
+    "score_autosd10_x86_64_toolchain",
+    "score_gcc_toolchain_15",
+)
