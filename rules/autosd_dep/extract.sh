@@ -16,6 +16,11 @@ set -euo pipefail
 rpm_file="$1"
 out_file="$2"
 
+# Keep the input reachable when the rpm2cpio fallback changes directories.
+if [[ "${rpm_file}" != /* ]]; then
+    rpm_file="${PWD}/${rpm_file}"
+fi
+
 if command -v rpm2archive >/dev/null 2>&1; then
     # Newer rpm2archive: uncompressed tar on stdout with -n.
     if rpm2archive -n "${rpm_file}" >"${out_file}" 2>/dev/null && [ -s "${out_file}" ]; then
