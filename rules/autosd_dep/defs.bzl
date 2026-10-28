@@ -10,6 +10,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+"""Repository rule for downloading and extracting AutoSD RPM packages."""
+
+load(":rpm.bzl", "find_rpm_url")
+
 DISTROS = {
     "autosd10": {
         "repositories": {
@@ -18,8 +22,6 @@ DISTROS = {
         },
     },
 }
-
-_DIGITS = "0123456789"
 
 # Used only when `build` is not provided.
 _DEFAULT_BUILD_FILE = '''\
@@ -31,63 +33,6 @@ filegroup(
     srcs = glob(["**"], exclude = ["BUILD.bazel", "WORKSPACE", "WORKSPACE.bazel"]),
 )
 '''
-
-def _resolve_url(base_url, href):
-    if "://" in href:
-        return href
-    if base_url.endswith("/"):
-        return base_url + href
-    return base_url + "/" + href
-
-def _find_rpm_url(content, base_url, package, arch):
-    """Return the download URL for `package` from an already-read index page."""
-    prefix = "{}-".format(package)  #package + "-"
-
-    # Accept the requested arch plus `noarch` (used by header/data packages).
-    suffixes = [".{}.rpm".format(arch), ".noarch.rpm"]
-
-    found = {}
-    for chunk in content.split('href="')[1:]:
-        end = chunk.find('"')
-        if end == -1:
-            continue
-        href = chunk[:end]
-        if not href.endswith(".rpm"):
-            continue
-        name = href.split("/")[-1]
-
-        ok_arch = False
-        for suffix in suffixes:
-            if name.endswith(suffix):
-                ok_arch = True
-                break
-        if not ok_arch:
-            continue
-
-        # "<package>-<version>...": the char after "<package>-" must be a digit.
-        # This distinguishes "zlib-ng-compat" from "zlib-ng-compat-devel".
-        if not name.startswith(prefix):
-            continue
-        rest = name[len(prefix):]
-        if len(rest) == 0 or rest[0] not in _DIGITS:
-            continue
-
-        found[name] = _resolve_url(base_url, href)
-
-    names = sorted(found.keys())
-    if len(names) == 0:
-        fail("autosd_rpm: no RPM found for package '{}' (arch {}) at {}".format(
-            package,
-            arch,
-            base_url,
-        ))
-    if len(names) > 1:
-        print("autosd_rpm: multiple RPMs matched '{}': {} -- using '{}'".format(
-            package,
-            names,
-            names[-1],
-        ))  # buildifier: disable=print
-    return found[names[-1]]
 
 def _autosd_rpm_impl(rctx):
     base_url = DISTROS[rctx.attr.distro]["repositories"][rctx.attr.arch]
@@ -106,7 +51,7 @@ def _autosd_rpm_impl(rctx):
     index = rctx.read("_index.html")
     rctx.delete("_index.html")
     for package in packages:
-        urls.append(_find_rpm_url(index, base_url, package, rctx.attr.arch))
+        urls.append(find_rpm_url(index, base_url, package, rctx.attr.arch))
 
     script = rctx.path(rctx.attr._extract_script)
     for i, url in enumerate(urls):
