@@ -43,7 +43,7 @@ jobs:
         uses: "eclipse-score/more-disk-space@v1"
 
       - name: "Checkout repository"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v6"
 
       - name: "Setup Bazel"
         uses: "bazel-contrib/setup-bazel@0.18.0"
@@ -54,7 +54,7 @@ jobs:
           cache-save: false
 
       - name: "Checkout"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v6"
 
       - name: "Build"
         run: "bazel build --config ${{ matrix.bazel_config }} ${{ matrix.bazel_target }}"
