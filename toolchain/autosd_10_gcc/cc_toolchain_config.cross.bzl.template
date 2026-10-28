@@ -1,0 +1,172 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+#
+# Cross-compilation toolchain config: tools run on the host and emit code for a
+# different target architecture. Unlike the native config, the compiler tools
+# are prefixed with the target tuple (e.g. aarch64-redhat-linux-gcc) and live in
+# a per-arch ./{HOST_ARCH} subtree, while the target C library / C++ runtime
+# live in a separate per-arch ./{TARGET_ARCH} subtree so the host tools and
+# target libraries never mix.
+load("@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl",
+     "feature", "flag_group", "flag_set", "tool_path", "with_feature_set")
+load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
+
+def _impl(ctx):
+    tgt_tuple = ctx.attr.target_tuple
+    major = ctx.attr.gcc_version.split(".")[0]
+    bin = "{HOST_ARCH}/usr/bin/" + tgt_tuple + "-"
+
+    tool_paths = [
+        tool_path(name = "gcc", path = bin + "gcc"),
+        tool_path(name = "g++", path = bin + "g++"),
+        tool_path(name = "ld", path = bin + "ld"),
+        tool_path(name = "ar", path = bin + "ar"),
+        tool_path(name = "as", path = bin + "as"),
+        tool_path(name = "cpp", path = bin + "cpp"),
+        tool_path(name = "gcov", path = bin + "gcov"),
+        tool_path(name = "nm", path = bin + "nm"),
+        tool_path(name = "objdump", path = bin + "objdump"),
+        tool_path(name = "strip", path = bin + "strip"),
+    ]
+
+    # GCC builtin headers ship with the cross compiler in the ./{HOST_ARCH}
+    # subtree; the target libc and C++ headers come from the separate
+    # ./{TARGET_ARCH} sysroot subtree.
+    gcc_builtin_include = "external/{REPO_NAME}/{HOST_ARCH}/usr/lib/gcc/" + tgt_tuple + "/" + major + "/include"
+    sysroot = "external/{REPO_NAME}/{TARGET_ARCH}"
+    sysroot_include = sysroot + "/usr/include"
+    cxx_include = sysroot + "/usr/include/c++/" + major
+
+    # Compiler flags
+    default_compile_flags = feature(
+        name = "default_compile_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [ACTION_NAMES.c_compile],
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-B" + "external/{REPO_NAME}/{HOST_ARCH}/usr/bin",
+                            "--sysroot=" + sysroot,
+                            "-nostdinc",
+                            "-isystem", gcc_builtin_include,
+                            "-isystem", sysroot_include,
+                            "-Wall",
+                            "-Wextra",
+                            "-Wno-builtin-macro-redefined",
+                            "-D__DATE__=redacted",
+                            "-D__TIMESTAMP__=redacted",
+                            "-D__TIME__=redacted",
+                        ] + ctx.attr.c_flags,
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = [ACTION_NAMES.cpp_compile],
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-B" + "external/{REPO_NAME}/{HOST_ARCH}/usr/bin",
+                            "--sysroot=" + sysroot,
+                            "-nostdinc++",
+                            "-isystem", cxx_include,
+                            "-isystem", cxx_include + "/" + tgt_tuple,
+                            "-isystem", cxx_include + "/backward",
+                            "-nostdinc",
+                            "-isystem", gcc_builtin_include,
+                            "-isystem", sysroot_include,
+                            "-Wall",
+                            "-Wextra",
+                            "-Wno-builtin-macro-redefined",
+                            "-D__DATE__=redacted",
+                            "-D__TIMESTAMP__=redacted",
+                            "-D__TIME__=redacted",
+                        ] + ctx.attr.cxx_flags,
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    default_link_flags = feature(
+        name = "default_link_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = [
+                    ACTION_NAMES.cpp_link_executable,
+                    ACTION_NAMES.cpp_link_dynamic_library,
+                ],
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-B" + "external/{REPO_NAME}/{HOST_ARCH}/usr/bin",
+                            "--sysroot=" + sysroot,
+                            "-Wl,--sysroot=" + sysroot,
+                            # crt*.o and libgcc.a ship with the cross compiler.
+                            "-L" + "external/{REPO_NAME}/{HOST_ARCH}/usr/lib/gcc/" + tgt_tuple + "/" + major,
+                            # Target C library / C++ runtime from the sysroot.
+                            "-L" + sysroot + "/lib64",
+                            "-L" + sysroot + "/lib",
+                            "-L" + sysroot + "/usr/lib64",
+                            "-L" + sysroot + "/usr/lib",
+                            # libstdc++.so linker script ships here in the sysroot.
+                            "-L" + sysroot + "/usr/lib/gcc/" + tgt_tuple + "/" + major,
+                            "-Wl,-rpath-link," + sysroot + "/lib64",
+                            "-Wl,-rpath-link," + sysroot + "/lib",
+                            "-Wl,-rpath-link," + sysroot + "/usr/lib64",
+                            "-Wl,-rpath-link," + sysroot + "/usr/lib",
+                            "-lstdc++",
+                            "-lm",
+                        ] + ctx.attr.link_flags,
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    # Feature to disable absolute path warnings for system headers
+    supports_header_path_normalization = feature(
+        name = "supports_header_path_normalization",
+        enabled = True,
+    )
+
+    return cc_common.create_cc_toolchain_config_info(
+        ctx = ctx,
+        features = [default_compile_flags, default_link_flags, supports_header_path_normalization],
+        cxx_builtin_include_directories = ctx.attr.include_dirs,
+        toolchain_identifier = "{DISTRO_NAME}-cross-{}-gcc-{}".format(ctx.attr.target_arch, ctx.attr.gcc_version),
+        host_system_name = "local",
+        target_system_name = ctx.attr.target_tuple,
+        target_cpu = ctx.attr.target_arch,
+        target_libc = "glibc",
+        compiler = "gcc",
+        abi_version = "unknown",
+        abi_libc_version = "unknown",
+        tool_paths = tool_paths,
+    )
+
+cc_toolchain_config = rule(
+    implementation = _impl,
+    attrs = {
+        "gcc_version": attr.string(mandatory = True),
+        "target_arch": attr.string(mandatory = True),
+        "target_tuple": attr.string(mandatory = True),
+        "include_dirs": attr.string_list(),
+        "c_flags": attr.string_list(),
+        "cxx_flags": attr.string_list(),
+        "link_flags": attr.string_list(),
+    },
+    provides = [CcToolchainConfigInfo],
+)

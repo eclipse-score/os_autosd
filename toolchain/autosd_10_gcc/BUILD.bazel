@@ -19,10 +19,18 @@ exports_files([
     "setup_toolchain.sh",
     "BUILD.bazel.template",
     "cc_toolchain_config.bzl.template",
+    "BUILD.cross.bazel.template",
+    "cc_toolchain_config.cross.bzl.template",
 ])
 
 # Convenience alias to the generated toolchain
 alias(
     name = "gcc_toolchain",
     actual = "@autosd_10_gcc_repo//:gcc_toolchain",
+)
+
+# Convenience alias to the generated cross toolchain
+alias(
+    name = "gcc_cross_toolchain",
+    actual = "@autosd_10_gcc_cross_repo//:gcc_toolchain",
 )

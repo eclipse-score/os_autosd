@@ -876,9 +876,45 @@
   },
   "selectedYankedVersions": {},
   "moduleExtensions": {
+    "//toolchain/autosd_10_gcc:extensions.bzl%autosd_10_gcc_cross_extension": {
+      "general": {
+        "bzlTransitiveDigest": "sjtHiHgXdkQc9/USfhLZSQD2eC2fCd/oKWz01dAVpkk=",
+        "usagesDigest": "FFYwATAwpzHRTmFObWCwL/SBmVlPcwgdlB2FYyKSYVU=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "autosd_10_gcc_cross_repo": {
+            "repoRuleId": "@@//toolchain/autosd_10_gcc:extensions.bzl%autosd_10_gcc_cross_toolchain",
+            "attributes": {
+              "target_arch": "aarch64",
+              "c_flags": [
+                "-O2",
+                "-g",
+                "-pipe",
+                "-Wall",
+                "-Werror=format-security"
+              ],
+              "cxx_flags": [
+                "-O2",
+                "-g",
+                "-pipe",
+                "-Wall",
+                "-Werror=format-security"
+              ],
+              "link_flags": [
+                "-Wl,-z,relro",
+                "-Wl,-z,now"
+              ]
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
+      }
+    },
     "//toolchain/autosd_10_gcc:extensions.bzl%autosd_10_gcc_extension": {
       "general": {
-        "bzlTransitiveDigest": "2CE3vr6ZZeujdI9OXOMZiCeA3GIVzolzw6/dJOlX6NU=",
+        "bzlTransitiveDigest": "sjtHiHgXdkQc9/USfhLZSQD2eC2fCd/oKWz01dAVpkk=",
         "usagesDigest": "VF2AT8VNNnRgfNzXeGwmUpxyoR9sWI6yX8mLvHSwxMk=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
