@@ -10,11 +10,16 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+"""Generate AutoSD GCC toolchains with optional S-CORE warning policies."""
+
 load(
     ":toolchain_utils.bzl",
     "detect_gcc_version",
     "get_target_architecture",
 )
+
+_STANDALONE_COMPILE_FLAGS = ["-O2", "-g", "-pipe", "-Wall", "-Werror=format-security"]
+_DEFAULT_LINK_FLAGS = ["-Wl,-z,relro", "-Wl,-z,now"]
 
 def _autosd_10_gcc_toolchain_impl(repository_ctx):
     """Downloads AutoSD 10 RPM packages and creates an isolated GCC toolchain."""
@@ -40,11 +45,12 @@ def _autosd_10_gcc_toolchain_impl(repository_ctx):
     # Detect GCC version
     gcc_version, gcc_major = detect_gcc_version(repository_ctx)
 
-    # Use flags passed from the extension (or defaults if none provided)
+    # Keep defaults for direct repository-rule callers as well as extension users.
+    default_compile_flags = [] if repository_ctx.attr.use_score_flags else _STANDALONE_COMPILE_FLAGS
     autosd_flags = {
-        "c_flags": getattr(repository_ctx.attr, "c_flags", []),
-        "cxx_flags": getattr(repository_ctx.attr, "cxx_flags", []),
-        "link_flags": getattr(repository_ctx.attr, "link_flags", []),
+        "c_flags": repository_ctx.attr.c_flags or default_compile_flags,
+        "cxx_flags": repository_ctx.attr.cxx_flags or default_compile_flags,
+        "link_flags": repository_ctx.attr.link_flags or _DEFAULT_LINK_FLAGS,
     }
 
     # Format flag lists for template substitution
@@ -62,6 +68,7 @@ def _autosd_10_gcc_toolchain_impl(repository_ctx):
             "{C_FLAGS}": c_flags_str,
             "{CXX_FLAGS}": cxx_flags_str,
             "{LINK_FLAGS}": link_flags_str,
+            "{USE_SCORE_FLAGS}": str(repository_ctx.attr.use_score_flags),
             "{GLIBC_CONSTRAINT}": "glibc_2_39_plus",
         },
     )
@@ -73,6 +80,13 @@ def _autosd_10_gcc_toolchain_impl(repository_ctx):
         substitutions = {
             "{REPO_NAME}": repository_ctx.name,
             "{DISTRO_NAME}": "autosd_10",
+            # Resolve dependencies in this module, including for consumers that
+            # do not declare rules_cc or score_cpp_policies themselves.
+            "{FEATURE_INJECTION_BZL}": str(Label("@rules_cc//cc/toolchains:feature_injection.bzl")),
+            "{MINIMAL_WARNINGS}": str(Label("@score_cpp_policies//warnings/gcc/features:minimal_warnings")),
+            "{STRICT_WARNINGS}": str(Label("@score_cpp_policies//warnings/gcc/features:strict_warnings")),
+            "{ALL_WALL_WARNINGS}": str(Label("@score_cpp_policies//warnings/gcc/features:all_wall_warnings")),
+            "{WARNINGS_AS_ERRORS}": str(Label("@score_cpp_policies//warnings/gcc/features:warnings_as_errors")),
         },
     )
 
@@ -82,15 +96,16 @@ autosd_10_gcc_toolchain = repository_rule(
     attrs = {
         "c_flags": attr.string_list(
             doc = "C compiler flags for the toolchain",
-            default = ["-O2", "-g", "-pipe", "-Wall", "-Werror=format-security"],
         ),
         "cxx_flags": attr.string_list(
             doc = "C++ compiler flags for the toolchain",
-            default = ["-O2", "-g", "-pipe", "-Wall", "-Werror=format-security"],
         ),
         "link_flags": attr.string_list(
             doc = "Linker flags for the toolchain",
-            default = ["-Wl,-z,relro", "-Wl,-z,now"],
+        ),
+        "use_score_flags": attr.bool(
+            doc = "Use S-CORE warning policies and AutoSD compiler defaults",
+            default = True,
         ),
     },
     doc = "Repository rule for AutoSD 10 GCC toolchain",
@@ -98,11 +113,6 @@ autosd_10_gcc_toolchain = repository_rule(
 
 def _autosd_10_gcc_extension_impl(module_ctx):
     """Extension implementation for AutoSD 10 GCC toolchain"""
-
-    # Default flags from the repository rule
-    default_c_flags = ["-O2", "-g", "-pipe", "-Wall", "-Werror=format-security"]
-    default_cxx_flags = ["-O2", "-g", "-pipe", "-Wall", "-Werror=format-security"]
-    default_link_flags = ["-Wl,-z,relro", "-Wl,-z,now"]
 
     # Create a separate toolchain for each module
     for i, mod in enumerate(module_ctx.modules):
@@ -114,32 +124,38 @@ def _autosd_10_gcc_extension_impl(module_ctx):
         cxx_flags = []
         link_flags = []
         replace_mode = False
+        use_score_flags = True
 
         for config_tag in mod.tags.configure:
             if config_tag.replace:
                 replace_mode = True
+            if not config_tag.use_score_flags:
+                use_score_flags = False
             c_flags.extend(config_tag.c_flags)
             cxx_flags.extend(config_tag.cxx_flags)
             link_flags.extend(config_tag.link_flags)
 
-        # If not in replace mode, prepend defaults
+        # Compiler defaults are applied as mode-dependent features, alongside
+        # S-CORE warnings. The AutoSD SDK uses a dynamic C++ runtime.
+        default_compile_flags = [] if use_score_flags else _STANDALONE_COMPILE_FLAGS
         if not replace_mode:
-            c_flags = default_c_flags + c_flags
-            cxx_flags = default_cxx_flags + cxx_flags
-            link_flags = default_link_flags + link_flags
-        else:  # If in replace mode but no flags provided, use defaults
+            c_flags = default_compile_flags + c_flags
+            cxx_flags = default_compile_flags + cxx_flags
+            link_flags = _DEFAULT_LINK_FLAGS + link_flags
+        else:  # Preserve the existing fallback for empty replacement lists.
             if not c_flags:
-                c_flags = default_c_flags
+                c_flags = default_compile_flags
             if not cxx_flags:
-                cxx_flags = default_cxx_flags
+                cxx_flags = default_compile_flags
             if not link_flags:
-                link_flags = default_link_flags
+                link_flags = _DEFAULT_LINK_FLAGS
 
         autosd_10_gcc_toolchain(
             name = toolchain_name,
             c_flags = c_flags,
             cxx_flags = cxx_flags,
             link_flags = link_flags,
+            use_score_flags = use_score_flags,
         )
 
 _configure_tag = tag_class(
@@ -154,8 +170,12 @@ _configure_tag = tag_class(
             doc = "Linker flags for the AutoSD 10 GCC toolchain",
         ),
         "replace": attr.bool(
-            doc = "If True, replace default flags. If False (default), append to default flags.",
+            doc = "Replace standalone compiler and AutoSD linker defaults. Policy warnings and AutoSD compiler defaults remain active.",
             default = False,
+        ),
+        "use_score_flags": attr.bool(
+            doc = "Use S-CORE warning policies and AutoSD compiler defaults. If any configure tag sets False, use standalone compiler defaults instead.",
+            default = True,
         ),
     },
     doc = "Configure compiler and linker flags for the AutoSD 10 GCC toolchain",

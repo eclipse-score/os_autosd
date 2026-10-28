@@ -15,6 +15,19 @@
 
 This directory contains Bazel toolchain definitions for building with AutoSD GCC compilers.
 
+The direct Bazel module uses the GCC warning features from
+[`score_cpp_policies`](https://github.com/eclipse-score/score_cpp_policies), with
+`minimal_warnings` enabled by default. AutoSD maintains its language, hardening,
+reproducibility, and compilation-mode defaults locally: C11/C++17, `-Og -g3` for
+`dbg`, and `-O2 -DNDEBUG` for `opt` and `fastbuild`. AutoSD's sysroot, compiler
+paths, and include directories are configured in every mode.
+AutoSD's linker defaults are retained because its SDK uses a dynamic C++ runtime.
+
+Enable stricter warnings with `--features=strict_warnings` or
+`--features=all_wall_warnings`; each includes the preceding warning levels.
+Use `--features=warnings_as_errors` to make warnings fatal, or
+`--features=-minimal_warnings` to disable the baseline warnings.
+
 ## Usage
 
 ### In your MODULE.bazel
@@ -56,7 +69,27 @@ build --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
 
 The `configure` tag accepts the following attributes:
 
-- `c_flags`: List of C compiler flags
-- `cxx_flags`: List of C++ compiler flags
-- `link_flags`: List of linker flags
-- `replace`: Boolean (default: false). If true, replaces default flags; if false, appends to defaults
+- `c_flags`: Additional C compiler flags
+- `cxx_flags`: Additional C++ compiler flags
+- `link_flags`: Additional linker flags
+- `use_score_flags`: Boolean (default: true). Use S-CORE warning policies and
+  AutoSD's language, hardening, and compilation-mode defaults. If any `configure`
+  tag for a module sets this to false, that module's toolchain uses the previous
+  standalone defaults instead, and the policy warning features are unavailable.
+- `replace`: Boolean (default: false). Replace standalone compiler defaults and
+  AutoSD linker defaults for each nonempty custom flag list. Empty lists keep
+  their defaults. Policy warnings and AutoSD compiler defaults remain active;
+  custom compiler flags are appended after them, regardless of `replace`.
+
+Custom flags appear after policy warnings and AutoSD defaults, so a setting such
+as `cxx_flags = ["-std=c++20"]` can override the default language standard.
+
+To disable S-CORE flags in your `MODULE.bazel`:
+
+```starlark
+autosd_10_gcc.configure(use_score_flags = False)
+```
+
+For a custom policy, combine `use_score_flags = False` with `replace = True` and
+provide the desired C, C++, and linker flags. Sysroot and include-path settings
+remain active.
