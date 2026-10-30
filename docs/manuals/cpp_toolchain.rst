@@ -128,15 +128,15 @@ MODULE.bazel content:
 
 .. code-block:: starlark
 
-   bazel_dep(name = "os_autosd", version = "1.0.0")
+   bazel_dep(name = "score_os_autosd", version = "1.0.0")
 
    git_override(
-     module_name = "os_autosd",
-     remote = "https://github.com/eclipse-score/inc_os_autosd",
+     module_name = "score_os_autosd",
+     remote = "https://github.com/eclipse-score/os_autosd",
      branch = "main",
    )
 
-   autosd_10_gcc = use_extension("@os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
+   autosd_10_gcc = use_extension("@score_os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
    autosd_10_gcc.configure(
      c_flags = ["-fPIC"],
      cxx_flags = ["-fPIC"],

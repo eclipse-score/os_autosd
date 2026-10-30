@@ -22,14 +22,14 @@ This directory contains Bazel toolchain definitions for building with AutoSD GCC
 ```python
 # Use local path during development, or git_override for published versions
 local_path_override(
-    module_name = "os_autosd",
-    path = "/path/to/inc_os_autosd/"
+    module_name = "score_os_autosd",
+    path = "/path/to/score_os_autosd/"
 )
 
-bazel_dep(name = "os_autosd", version = "1.0.0")
+bazel_dep(name = "score_os_autosd", version = "1.0.0")
 
 # Configure AutoSD 10 GCC toolchain
-autosd_10_gcc = use_extension("@os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
+autosd_10_gcc = use_extension("@score_os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
 autosd_10_gcc.configure(
     c_flags = ["-Wall", "-Wno-error=deprecated-declarations", "-Werror", "-fPIC"],
     cxx_flags = ["-Wall", "-Wno-error=deprecated-declarations", "-Werror", "-fPIC"],
@@ -50,7 +50,7 @@ build --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
 
 ## Available Toolchains
 
-- **AutoSD 10 GCC**: `@os_autosd//toolchain/autosd_10_gcc`
+- **AutoSD 10 GCC**: `@score_os_autosd//toolchain/autosd_10_gcc`
 
 ## Configuration Options
 

@@ -23,7 +23,7 @@ Bazel rules for building RPM packages.
 # Use local path during development, or git_override for published versions
 local_path_override(
     module_name = "rules_rpm",
-    path = "/path/to/inc_os_autosd/toolchain/rpm"
+    path = "/path/to/score_os_autosd/toolchain/rpm"
 )
 
 bazel_dep(name = "rules_rpm", version = "0.1.0")

@@ -10,7 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(name = "os_autosd")
+module(name = "score_os_autosd")
 
 # Platform definitions
 bazel_dep(name = "platforms", version = "0.0.11")

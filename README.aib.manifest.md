@@ -439,7 +439,7 @@ kernel_remove_modules = ["floppy"]
 ## Complete Example
 
 ```python
-load("@os_autosd//toolchain/aib:defs.bzl", "aib_build", "aib_build_builder", "aib_manifest")
+load("@score_os_autosd//toolchain/aib:defs.bzl", "aib_build", "aib_build_builder", "aib_manifest")
 
 aib_build_builder(
     name = "builder",

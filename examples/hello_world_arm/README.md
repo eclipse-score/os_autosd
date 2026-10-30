@@ -17,7 +17,7 @@ A minimal example that cross-compiles a C++ "hello world" into an **aarch64**
 binary on an **x86_64** host, using the AutoSD GCC toolchain in *standalone*
 mode (see `docs/manuals/cpp_toolchain.rst`).
 
-It follows the manual's "Standalone" setup, except `os_autosd` is consumed from
+It follows the manual's "Standalone" setup, except `score_os_autosd` is consumed from
 the local checkout (`local_path_override` to `../../`) instead of a
 `git_override`.
 
@@ -41,7 +41,7 @@ bazel build //:hello
 
 ## Demos
 
-The `demos/` folder is copied from `os_autosd_example_persistency` and wired to
+The `demos/` folder is copied from `score_os_autosd_example_persistency` and wired to
 cross-build (C/C++ targets only; the Rust demo was dropped).
 
 | Target | Lang | Notes |
@@ -92,9 +92,9 @@ sysroot lives under `bazel info output_base`/external/ in the
 
 ## How it works
 
-- `MODULE.bazel` pulls in the local `os_autosd` and uses the
+- `MODULE.bazel` pulls in the local `score_os_autosd` and uses the
   `autosd_10_gcc_cross_extension`, producing `@autosd_10_gcc_cross_repo`.
-- `.bazelrc` sets `--platforms=@os_autosd//toolchain:autosd10_aarch64` (target
+- `.bazelrc` sets `--platforms=@score_os_autosd//toolchain:autosd10_aarch64` (target
   aarch64) and registers `cross_gcc_toolchain_x86_64_aarch64` via
   `--extra_toolchains`. The host/exec platform stays the x86_64 host, which
   matches the cross toolchain's exec constraints — so Bazel selects it only for

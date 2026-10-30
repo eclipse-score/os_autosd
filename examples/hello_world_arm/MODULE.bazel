@@ -13,16 +13,16 @@
 #
 # Standalone usage of the AutoSD GCC toolchain (see docs/manuals/cpp_toolchain.rst),
 # building an aarch64 "hello world" binary on an x86_64 host with the cross
-# toolchain. The only difference from the manual is that os_autosd is consumed
+# toolchain. The only difference from the manual is that score_os_autosd is consumed
 # from the local checkout (../../) instead of a git_override.
 module(
     name = "hello_world_arm",
     version = "0.0.0",
 )
 
-bazel_dep(name = "os_autosd", version = "0.0.0")
+bazel_dep(name = "score_os_autosd", version = "0.0.0")
 local_path_override(
-    module_name = "os_autosd",
+    module_name = "score_os_autosd",
     path = "../../",
 )
 
@@ -30,12 +30,12 @@ bazel_dep(name = "rules_cc", version = "0.1.1")
 bazel_dep(name = "platforms", version = "0.0.11")
 
 # Score modules consumed by the C++ persistency demo (score_persistency ->
-# score_baselibs, ...). Shared with the os_autosd_example_persistency example.
+# score_baselibs, ...). Shared with the score_os_autosd_example_persistency example.
 include("//:score_modules.MODULE.bazel")
 
 # Non-registry overrides required by the score modules' transitive graph.
 # archive_override/git_override are not forwarded through bazel_dep, so the root
-# module must redefine them (same as os_autosd_example_persistency).
+# module must redefine them (same as score_os_autosd_example_persistency).
 bazel_dep(name = "rules_boost", repo_name = "com_github_nelhage_rules_boost")
 archive_override(
     module_name = "rules_boost",
@@ -58,7 +58,7 @@ git_override(
 )
 
 # AutoSD cross GCC toolchain: tools run on the x86_64 host and emit aarch64 code.
-autosd_10_gcc_cross = use_extension("@os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_cross_extension")
+autosd_10_gcc_cross = use_extension("@score_os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_cross_extension")
 autosd_10_gcc_cross.configure(
     c_flags = ["-fPIC"],
     cxx_flags = ["-fPIC"],
@@ -68,5 +68,5 @@ use_repo(autosd_10_gcc_cross, "autosd_10_gcc_cross_repo")
 # Native x86_64 toolchain, for host/exec-config C/C++ actions (e.g. build-time
 # tools pulled in by the score modules). The cross toolchain above handles the
 # aarch64 target build.
-autosd_10_gcc = use_extension("@os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
+autosd_10_gcc = use_extension("@score_os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
 use_repo(autosd_10_gcc, "autosd_10_gcc_repo")

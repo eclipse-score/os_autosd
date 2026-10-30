@@ -22,7 +22,7 @@
 
 project = "CentOS AutoSD 10 Development Target"
 project_url = "https://github.com/eclipse-score/os_autosd"
-project_prefix = "os_autosd_"
+project_prefix = "score_os_autosd_"
 author = "S-CORE"
 version = "0.0.2"
 

@@ -23,8 +23,8 @@ This repository contains files to on-board AutoSD as a development target platfo
 Clone the repository by running:
 
 ```sh
-git clone https://github.com/eclipse-score/inc_os_autosd.git
-cd inc_os_autosd
+git clone https://github.com/eclipse-score/os_autosd.git
+cd os_autosd
 ```
 
 A `Containerfile` is provided for convenience to run Bazel commands, build it on AMD64 by running:

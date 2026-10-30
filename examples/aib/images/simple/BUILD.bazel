@@ -10,7 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-load("@os_autosd//toolchain/aib:defs.bzl", "aib_build_disk", "aib_build_image")
+load("@score_os_autosd//toolchain/aib:defs.bzl", "aib_build_disk", "aib_build_image")
 
 aib_build_image(
     name = "simple",

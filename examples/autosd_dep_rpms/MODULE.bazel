@@ -15,16 +15,16 @@ module(
     version = "0.0.0",
 )
 
-bazel_dep(name = "os_autosd", version = "0.0.0")
+bazel_dep(name = "score_os_autosd", version = "0.0.0")
 local_path_override(
-    module_name = "os_autosd",
+    module_name = "score_os_autosd",
     path = "../../",
 )
 
 bazel_dep(name = "rules_cc", version = "0.1.1")
 bazel_dep(name = "platforms", version = "0.0.11")
 
-autosd_rpm = use_repo_rule("@os_autosd//rules/autosd_dep:defs.bzl", "autosd_rpm")
+autosd_rpm = use_repo_rule("@score_os_autosd//rules/autosd_dep:defs.bzl", "autosd_rpm")
 
 autosd_rpm(
     name = "zlib-rpm",

@@ -11,7 +11,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@os_autosd//toolchain/aib:defs.bzl", "aib_build_builder", "aib_script")
+load("@score_os_autosd//toolchain/aib:defs.bzl", "aib_build_builder", "aib_script")
 
 aib_script(
     name = "aib_build_script",
