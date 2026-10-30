@@ -48,5 +48,9 @@ bazel_dep(name = "score_docs_as_code", version = "4.6.0")
 autosd_10_gcc = use_extension("//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
 use_repo(autosd_10_gcc, "autosd_10_gcc_repo")
 
+# AutoSD cross GCC toolchain (e.g. x86_64 host building aarch64 targets)
+autosd_10_gcc_cross = use_extension("//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_cross_extension")
+use_repo(autosd_10_gcc_cross, "autosd_10_gcc_cross_repo")
+
 # https://github.com/grpc/grpc-java/issues/12165
 bazel_dep(name = "grpc-java", version = "1.78.0")

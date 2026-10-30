@@ -1,0 +1,35 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
+common --registry=https://bcr.bazel.build
+
+# Flags required by the score_baselibs / communication modules used by the
+# C++ persistency demo (same values as os_autosd_example_persistency).
+build --@score_baselibs//score/mw/log/detail/flags:KUse_Stub_Implementation_Only=False
+build --@score_baselibs//score/mw/log/flags:KRemote_Logging=False
+build --@score_baselibs//score/json:base_library=nlohmann
+build --@score_communication//score/mw/com/flags:tracing_library=stub
+
+# Build aarch64 binaries on an x86_64 host using the AutoSD cross toolchain.
+# The target platform is aarch64; the host/exec platform stays the auto-detected
+# x86_64 host, which matches the cross toolchain's exec constraints. The native
+# x86_64 toolchain is also registered so host/exec-config C/C++ actions (build
+# tools pulled in by the score modules) have a matching toolchain.
+build:autosd-aarch64 --force_pic
+build:autosd-aarch64 --platforms=@os_autosd//toolchain:autosd10_aarch64
+build:autosd-aarch64 --extra_toolchains=@autosd_10_gcc_cross_repo//:cross_gcc_toolchain_x86_64_aarch64
+build:autosd-aarch64 --extra_toolchains=@autosd_10_gcc_repo//:gcc_toolchain_linux_x86_64
+
+# This example only cross-compiles, so make the aarch64 config the default.
+build --config=autosd-aarch64

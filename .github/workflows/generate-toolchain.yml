@@ -25,6 +25,18 @@ jobs:
     permissions:
       contents: write # Push tag
       id-token: write
+    strategy:
+      matrix:
+        include:
+          - host_arch: aarch64
+            target_arch: aarch64
+            tar_name: autosd-toolchain-aarch64.tar.gz
+          - host_arch: x86_64
+            target_arch: x86_64
+            tar_name: autosd-toolchain-x86_64.tar.gz
+          - host_arch: x86_64
+            target_arch: aarch64
+            tar_name: autosd-toolchain-crossland.tar.gz
 
     steps:
       - name: Checkout repository
@@ -37,15 +49,15 @@ jobs:
 
       - name: Generate toolchain tarball
         run: |
-          ./setup_toolchain.sh --tarball "autosd-toolchain-x86_64.tar.gz" x86_64
-          ./setup_toolchain.sh --tarball "autosd-toolchain-aarch64.tar.gz" aarch64
+          ./setup_toolchain.sh  --host ${{matrix.host_arch}} --target ${{matrix.target_arch}} sysroot/
+           tar -czf  ${{matrix.tar_name}} sysroot
         working-directory: toolchain/autosd_10_gcc
 
       - name: Store Toolchain Tarball
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: eclipse-score-autosd-toolchain-tarballs
-          path: toolchain/autosd_10_gcc/autosd-toolchain-*.tar.gz
+          name: ${{matrix.tar_name}}
+          path: toolchain/autosd_10_gcc/${{matrix.tar_name}}
 
   release-toolchain-tarball:
     needs: generate-toolchain-tarball
@@ -70,7 +82,6 @@ jobs:
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          pattern: eclipse-score-autosd-toolchain-tarballs
           merge-multiple: true
           path: _autosd_artifacts/
 
@@ -78,6 +89,7 @@ jobs:
         run: |
           stat _autosd_artifacts/autosd-toolchain-aarch64.tar.gz
           stat _autosd_artifacts/autosd-toolchain-x86_64.tar.gz
+          stat _autosd_artifacts/autosd-toolchain-crossland.tar.gz
 
       - name: Delete existing continuous release
         env:
@@ -107,5 +119,6 @@ jobs:
           files: |
             _autosd_artifacts/autosd-toolchain-aarch64.tar.gz
             _autosd_artifacts/autosd-toolchain-x86_64.tar.gz
+            _autosd_artifacts/autosd-toolchain-crossland.tar.gz
           fail_on_unmatched_files: true
           prerelease: false

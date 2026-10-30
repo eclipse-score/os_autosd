@@ -1,0 +1,72 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+#
+# Standalone usage of the AutoSD GCC toolchain (see docs/manuals/cpp_toolchain.rst),
+# building an aarch64 "hello world" binary on an x86_64 host with the cross
+# toolchain. The only difference from the manual is that os_autosd is consumed
+# from the local checkout (../../) instead of a git_override.
+module(
+    name = "hello_world_arm",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "os_autosd", version = "0.0.0")
+local_path_override(
+    module_name = "os_autosd",
+    path = "../../",
+)
+
+bazel_dep(name = "rules_cc", version = "0.1.1")
+bazel_dep(name = "platforms", version = "0.0.11")
+
+# Score modules consumed by the C++ persistency demo (score_persistency ->
+# score_baselibs, ...). Shared with the os_autosd_example_persistency example.
+include("//:score_modules.MODULE.bazel")
+
+# Non-registry overrides required by the score modules' transitive graph.
+# archive_override/git_override are not forwarded through bazel_dep, so the root
+# module must redefine them (same as os_autosd_example_persistency).
+bazel_dep(name = "rules_boost", repo_name = "com_github_nelhage_rules_boost")
+archive_override(
+    module_name = "rules_boost",
+    strip_prefix = "rules_boost-master",
+    urls = ["https://github.com/nelhage/rules_boost/archive/refs/heads/master.tar.gz"],
+)
+
+bazel_dep(name = "trlc")
+git_override(
+    module_name = "trlc",
+    commit = "650b51a47264a4f232b3341f473527710fc32669",  # trlc-2.0.2 release
+    remote = "https://github.com/bmw-software-engineering/trlc.git",
+)
+
+bazel_dep(name = "rules_rust", version = "0.67.0")
+git_override(
+    module_name = "rules_rust",
+    commit = "2b171a7376e69cb1207eced1f66904ce4ae0c819",
+    remote = "https://github.com/pawelrutkaq/rules_rust.git",
+)
+
+# AutoSD cross GCC toolchain: tools run on the x86_64 host and emit aarch64 code.
+autosd_10_gcc_cross = use_extension("@os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_cross_extension")
+autosd_10_gcc_cross.configure(
+    c_flags = ["-fPIC"],
+    cxx_flags = ["-fPIC"],
+)
+use_repo(autosd_10_gcc_cross, "autosd_10_gcc_cross_repo")
+
+# Native x86_64 toolchain, for host/exec-config C/C++ actions (e.g. build-time
+# tools pulled in by the score modules). The cross toolchain above handles the
+# aarch64 target build.
+autosd_10_gcc = use_extension("@os_autosd//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
+use_repo(autosd_10_gcc, "autosd_10_gcc_repo")
