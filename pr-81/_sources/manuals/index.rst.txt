@@ -23,3 +23,4 @@ Manuals
    rpm_toolchain
    rust_toolchain
    images
+   rule_autosd_dep
