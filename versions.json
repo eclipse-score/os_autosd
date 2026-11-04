@@ -8,11 +8,11 @@
     "url": "https://eclipse-score.github.io/os_autosd/pr-74/"
   },
   {
-    "version": "v0.2.0",
-    "url": "https://eclipse-score.github.io/os_autosd/v0.2.0/"
-  },
-  {
     "version": "pr-82",
     "url": "https://eclipse-score.github.io/os_autosd/pr-82/"
+  },
+  {
+    "version": "v0.2.0",
+    "url": "https://eclipse-score.github.io/os_autosd/v0.2.0/"
   }
 ]
