@@ -42,7 +42,7 @@ bazel_dep(name = "aspect_rules_lint", version = "1.4.4", dev_dependency = True)
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2", dev_dependency = True)
 
 #docs-as-code
-bazel_dep(name = "score_docs_as_code", version = "4.6.0")
+bazel_dep(name = "score_docs_as_code", version = "4.6.1")
 
 # AutoSD GCC Toolchains
 autosd_10_gcc = use_extension("//toolchain/autosd_10_gcc:extensions.bzl", "autosd_10_gcc_extension")
