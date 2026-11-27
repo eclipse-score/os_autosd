@@ -10,7 +10,6 @@ build --tool_java_runtime_version=remotejdk_17
 
 # Common
 ## Baselibs
-build:_common --@score_baselibs//score/json:base_library=nlohmann
 build:_common --@score_baselibs//score/log_rust:safety_level=qm
 build:_common --@score_baselibs//score/analysis/tracing/generic_trace_library:implementation=@score_baselibs//score/analysis/tracing/generic_trace_library/stub_implementation
 ## Logging
