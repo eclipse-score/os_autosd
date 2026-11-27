@@ -26,5 +26,9 @@
   {
     "version": "v0.2.0",
     "url": "https://eclipse-score.github.io/os_autosd/v0.2.0/"
+  },
+  {
+    "version": "pr-87",
+    "url": "https://eclipse-score.github.io/os_autosd/pr-87/"
   }
 ]
