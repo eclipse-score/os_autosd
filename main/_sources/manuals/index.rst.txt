@@ -19,6 +19,8 @@ Manuals
 
    cpp_toolchain
    cpp_toolchain_flags
+   cpp_toolchain_cross_compilation
    rpm_toolchain
    rust_toolchain
    images
+   rule_autosd_dep

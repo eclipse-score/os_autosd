@@ -146,7 +146,7 @@ Building Disk Images with Bazel
 -------------------------------
 
 It's possible to build AutoSD disk images (QCOW2, VHD, and raw) using Bazel.
-The **os_autosd** module needs to be used as a Bazel direct dependency to do so.
+The **score_os_autosd** module needs to be used as a Bazel direct dependency to do so.
 
 The Bazel rule uses `automotive-image-builder(AIB) <https://sigs.centos.org/automotive/latest/getting-started/about-automotive-image-builder.html>`_,
 a tool provided by the CentOS Automotive SIG to build AutoSD images.
@@ -295,11 +295,11 @@ MODULE.bazel
 
 .. code-block:: starlark
 
-   module(name="os_autosd_aib_example")
+   module(name="score_os_autosd_aib_example")
 
-   bazel_dep(name = "os_autosd", version = "0.0.0")
+   bazel_dep(name = "score_os_autosd", version = "0.0.0")
    git_override(
-     module_name = "os_autosd",
+     module_name = "score_os_autosd",
      remote = "https://github.com/eclipse-score/os_autosd.git",
      branch = "main",
    )
@@ -309,7 +309,7 @@ BUILD.bazel
 
 .. code-block:: starlark
 
-   load("@os_autosd//toolchain/aib:defs.bzl", "aib_script", "aib_build_builder", "aib_build_image", "aib_build_disk")
+   load("@score_os_autosd//toolchain/aib:defs.bzl", "aib_script", "aib_build_builder", "aib_build_image", "aib_build_disk")
 
    aib_script(
      name = "aib_build_script",

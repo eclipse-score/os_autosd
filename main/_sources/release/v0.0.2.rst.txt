@@ -15,7 +15,7 @@
 v0.0.2
 ======
 
-| **Module Name:** os_autosd
+| **Module Name:** score_os_autosd
 | **Release Tag:** v0.0.2
 | **Origin Release Tag:** v0.0.2
 | **Release Date:** 2026-07-24

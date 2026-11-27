@@ -38,11 +38,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
@@ -365,9 +365,11 @@
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="cpp_toolchain.html">CPP Toolchain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_toolchain_flags.html">CPP Toolchain Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_toolchain_cross_compilation.html">CPP Toolchain Cross Compilation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpm_toolchain.html">RPM Toolchain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rust_toolchain.html">Rust Toolchain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="images.html">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rule_autosd_dep.html">AutoSD RPMs as Bazel Dependencies</a></li>
 </ul>
 </div>
 </nav></div>
@@ -443,6 +445,19 @@
 <li class="toctree-l2"><a class="reference internal" href="cpp_toolchain_flags.html#warnings-as-errors">Warnings as Errors</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_toolchain_cross_compilation.html">CPP Toolchain Cross Compilation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_toolchain_cross_compilation.html#bazel-cpp-toolchains">bazel_cpp_toolchains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_toolchain_cross_compilation.html#module-bazel">MODULE.bazel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_toolchain_cross_compilation.html#bazelrc">.bazelrc</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_toolchain_cross_compilation.html#standalone">Standalone</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cpp_toolchain_cross_compilation.html#id1">MODULE.bazel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_toolchain_cross_compilation.html#id2">.bazelrc</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="rpm_toolchain.html">RPM Toolchain</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rpm_toolchain.html#setup">Setup</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="rpm_toolchain.html#module-bazel">MODULE.bazel</a></li>
@@ -476,6 +491,17 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="images.html#building">Building</a></li>
 <li class="toctree-l3"><a class="reference internal" href="images.html#known-limitations">Known Limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rule_autosd_dep.html">AutoSD RPMs as Bazel Dependencies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rule_autosd_dep.html#usage">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rule_autosd_dep.html#module-bazel">MODULE.bazel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rule_autosd_dep.html#build-bazel">BUILD.bazel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rule_autosd_dep.html#third-party-zlib-build-bazel">third_party/zlib/BUILD.bazel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rule_autosd_dep.html#third-party-zlib-zlib-build">third_party/zlib/zlib.BUILD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rule_autosd_dep.html#src-zlib-demo-c">src/zlib_demo.c</a></li>
 </ul>
 </li>
 </ul>

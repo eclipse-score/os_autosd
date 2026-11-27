@@ -38,11 +38,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
@@ -73,7 +73,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Releases" href="../release/index.html" />
+    <link rel="next" title="AutoSD RPMs as Bazel Dependencies" href="rule_autosd_dep.html" />
     <link rel="prev" title="Rust Toolchain" href="rust_toolchain.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -365,9 +365,11 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="cpp_toolchain.html">CPP Toolchain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cpp_toolchain_flags.html">CPP Toolchain Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_toolchain_cross_compilation.html">CPP Toolchain Cross Compilation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rpm_toolchain.html">RPM Toolchain</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rust_toolchain.html">Rust Toolchain</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rule_autosd_dep.html">AutoSD RPMs as Bazel Dependencies</a></li>
 </ul>
 </div>
 </nav></div>
@@ -543,7 +545,7 @@ $<span class="w"> </span>system<span class="w"> </span>reboot
 <section id="building-disk-images-with-bazel">
 <h2>Building Disk Images with Bazel<a class="headerlink" href="#building-disk-images-with-bazel" title="Link to this heading">#</a></h2>
 <p>It’s possible to build AutoSD disk images (QCOW2, VHD, and raw) using Bazel.
-The <strong>os_autosd</strong> module needs to be used as a Bazel direct dependency to do so.</p>
+The <strong>score_os_autosd</strong> module needs to be used as a Bazel direct dependency to do so.</p>
 <p>The Bazel rule uses <a class="reference external" href="https://sigs.centos.org/automotive/latest/getting-started/about-automotive-image-builder.html">automotive-image-builder(AIB)</a>,
 a tool provided by the CentOS Automotive SIG to build AutoSD images.</p>
 <p>NOTE: AIB does not support cross-compilation.</p>
@@ -806,11 +808,11 @@ The file extension will be determined based on the target.</p>
 <p>A full working example can be found at: <a class="reference external" href="https://github.com/eclipse-score/os_autosd/tree/main/examples/aib">https://github.com/eclipse-score/os_autosd/tree/main/examples/aib</a>.</p>
 <section id="module-bazel">
 <h4>MODULE.bazel<a class="headerlink" href="#module-bazel" title="Link to this heading">#</a></h4>
-<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">module</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;os_autosd_aib_example&quot;</span><span class="p">)</span>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">module</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;score_os_autosd_aib_example&quot;</span><span class="p">)</span>
 
-<span class="n">bazel_dep</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;os_autosd&quot;</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;0.0.0&quot;</span><span class="p">)</span>
+<span class="n">bazel_dep</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;score_os_autosd&quot;</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;0.0.0&quot;</span><span class="p">)</span>
 <span class="n">git_override</span><span class="p">(</span>
-  <span class="n">module_name</span> <span class="o">=</span> <span class="s2">&quot;os_autosd&quot;</span><span class="p">,</span>
+  <span class="n">module_name</span> <span class="o">=</span> <span class="s2">&quot;score_os_autosd&quot;</span><span class="p">,</span>
   <span class="n">remote</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/eclipse-score/os_autosd.git&quot;</span><span class="p">,</span>
   <span class="n">branch</span> <span class="o">=</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
 <span class="p">)</span>
@@ -819,7 +821,7 @@ The file extension will be determined based on the target.</p>
 </section>
 <section id="build-bazel">
 <h4>BUILD.bazel<a class="headerlink" href="#build-bazel" title="Link to this heading">#</a></h4>
-<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;@os_autosd//toolchain/aib:defs.bzl&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_script&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_image&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_disk&quot;</span><span class="p">)</span>
+<div class="highlight-starlark notranslate"><div class="highlight"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;@score_os_autosd//toolchain/aib:defs.bzl&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_script&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_builder&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_image&quot;</span><span class="p">,</span> <span class="s2">&quot;aib_build_disk&quot;</span><span class="p">)</span>
 
 <span class="n">aib_script</span><span class="p">(</span>
   <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;aib_build_script&quot;</span><span class="p">,</span>
@@ -905,11 +907,11 @@ The file extension will be determined based on the target.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../release/index.html"
+       href="rule_autosd_dep.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Releases</p>
+        <p class="prev-next-title">AutoSD RPMs as Bazel Dependencies</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
